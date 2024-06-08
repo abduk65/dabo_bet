@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ab04628ac9994c0f42682cfafc804953",
+    "content-hash": "86600f8497675fa754cd9442065c55a2",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -6253,6 +6253,53 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "break-travel/artisan-serve-xdebug",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/break-travel/artisan-serve-xdebug.git",
+                "reference": "0c5fa042f30cb813270d5965a0ecae4145bff413"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/break-travel/artisan-serve-xdebug/zipball/0c5fa042f30cb813270d5965a0ecae4145bff413",
+                "reference": "0c5fa042f30cb813270d5965a0ecae4145bff413",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "*"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "BreakTravel\\ArtisanServeXdebug\\Provider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "BreakTravel\\ArtisanServeXdebug\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "Unlicense"
+            ],
+            "authors": [
+                {
+                    "name": "phil-break",
+                    "email": "phil@break.travel"
+                }
+            ],
+            "description": "Extends the Laravel Artisan Serve command to utilize XDebug.",
+            "support": {
+                "issues": "https://github.com/break-travel/artisan-serve-xdebug/issues",
+                "source": "https://github.com/break-travel/artisan-serve-xdebug/tree/v1.0.0"
+            },
+            "time": "2022-11-25T09:09:43+00:00"
+        },
         {
             "name": "fakerphp/faker",
             "version": "v1.23.1",
