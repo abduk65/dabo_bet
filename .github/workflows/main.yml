@@ -30,12 +30,7 @@ jobs:
 
     - name: Generate app key
       run: php artisan key:generate
-
-    - name: Create database
-      run: |
-        sudo apt-get install -y mysql-server
-        sudo mysql -e 'CREATE DATABASE dabo_bet;'
-
+      
     - name: Run migrations
       run: php artisan migrate --force
 
