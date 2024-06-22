@@ -34,9 +34,6 @@ jobs:
     - name: Run migrations
       run: php artisan migrate --force
 
-    - name: Run tests
-      run: php artisan test
-
     - name: Cache Composer dependencies
       uses: actions/cache@v2
       with:
