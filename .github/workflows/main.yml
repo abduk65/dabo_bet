@@ -114,7 +114,7 @@ jobs:
           scp -o StrictHostKeyChecking=no -r ./ $GCE_USERNAME@$GCE_HOST:/var/www/html/dabo_bet/
 
       - name: Install Composer Dependencies
-        uses: shivmahajan/composer-install@v1
+        uses: actions/composer@v3
         with:
           composer-version: "2"
 
