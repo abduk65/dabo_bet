@@ -92,41 +92,70 @@
 
 # env:
 #   GCE_HOST: 34.122.150.61 # Replace with your public IP
-name: Laravel Deployment (Username/Password - Not Recommended)
+name: Deploy Laravel Application
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
+    env:
+      GCE_SERVER_IP: ${{ secrets.GCE_SERVER_IP }}
+
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-      - name: Load Credentials (Not recommended)
-        run: |
-          echo "export GCE_USERNAME=${{ secrets.GCE_USERNAME }}" >> $GITHUB_ENV  # Consider using secrets instead (more secure)
-          echo "export GCE_PASSWORD=${{ secrets.GCE_PASSWORD }}" >> $GITHUB_ENV  # Consider using secrets instead (more secure)
-
-      - name: Copy Codebase to Server
-        run: |
-          scp -o StrictHostKeyChecking=no -r ./ $GCE_USERNAME@$GCE_HOST:/var/www/html/dabo_bet/
-
-      - name: Install Composer Dependencies
-        uses: actions/composer@v3
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
         with:
-          composer-version: "2"
+          php-version: "8.2"
 
-      - name: Run Artisan Commands
+      - name: Install Dependencies
+        run: composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Generate Application Key
+        run: php artisan key:generate
+
+      - name: Prepare Deployment Package
         run: |
-          sshpass -h $GCE_HOST ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $GCE_USERNAME "cd /var/www/html/dabo_bet && php artisan migrate:fresh --force && php artisan cache:clear && php artisan config:cache"
+          php artisan config:cache
+          php artisan route:cache
+          php artisan view:cache
 
-      - name: Restart Application Service (if applicable)
+      - name: Copy Files to Server
+        env:
+          GCE_USERNAME: ${{ secrets.GCE_USERNAME }}
+          GCE_PASSWORD: ${{ secrets.GCE_PASSWORD }}
         run: |
-          sshpass -h $GCE_HOST ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $GCE_USERNAME "sudo systemctl restart your_application_service"  # Replace with your service command
+          sshpass -p ${{ secrets.GCE_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.GCE_USERNAME }}@${{ env.GCE_SERVER_IP }} "rm -rf /var/www/html/dabo_bet/*"
+          rsync -avz --delete --exclude=".env" --exclude="storage/" --exclude="vendor/" ./ ${{ secrets.GCE_USERNAME }}@${{ env.GCE_SERVER_IP }}:/var/www/html/dabo_bet
 
-env:
-  GCE_HOST: 34.122.150.61 # Replace with your public IP
-# Consider using secrets for GCE_USERNAME and GCE_PASSWORD (more secure)
+      - name: Set Environment Variables
+        env:
+          APP_ENV: "production"
+          APP_KEY: ${{ secrets.APP_KEY }}
+          DB_HOST: ${{ secrets.DB_HOST }}
+          DB_DATABASE: ${{ secrets.DB_DATABASE }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          GCE_USERNAME: ${{ secrets.GCE_USERNAME }}
+          GCE_PASSWORD: ${{ secrets.GCE_PASSWORD }}
+        run: |
+          sshpass -p ${{ secrets.GCE_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.GCE_USERNAME }}@${{ env.GCE_SERVER_IP }} "echo 'APP_ENV=${{ env.APP_ENV }}' > /var/www/html/dabo_bet/.env"
+          sshpass -p ${{ secrets.GCE_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.GCE_USERNAME }}@${{ env.GCE_SERVER_IP }} "echo 'APP_KEY=${{ env.APP_KEY }}' >> /var/www/html/dabo_bet/.env"
+          sshpass -p ${{ secrets.GCE_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.GCE_USERNAME }}@${{ env.GCE_SERVER_IP }} "echo 'DB_HOST=${{ env.DB_HOST }}' >> /var/www/html/dabo_bet/.env"
+          sshpass -p ${{ secrets.GCE_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.GCE_USERNAME }}@${{ env.GCE_SERVER_IP }} "echo 'DB_DATABASE=${{ env.DB_DATABASE }}' >> /var/www/html/dabo_bet/.env"
+          sshpass -p ${{ secrets.GCE_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.GCE_USERNAME }}@${{ env.GCE_SERVER_IP }} "echo 'DB_USERNAME=${{ env.DB_USERNAME }}' >> /var/www/html/dabo_bet/.env"
+          sshpass -p ${{ secrets.GCE_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.GCE_USERNAME }}@${{ env.GCE_SERVER_IP }} "echo 'DB_PASSWORD=${{ env.DB_PASSWORD }}' >> /var/www/html/dabo_bet/.env"
 
+      - name: Run Migrations
+        env:
+          GCE_USERNAME: ${{ secrets.GCE_USERNAME }}
+          GCE_PASSWORD: ${{ secrets.GCE_PASSWORD }}
+        run: |
+          sshpass -p ${{ secrets.GCE_PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.GCE_USERNAME }}@${{ env.GCE_SERVER_IP }} "cd /var/www/html/dabo_bet && php artisan migrate --force"
