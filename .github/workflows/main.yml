@@ -1,59 +1,132 @@
-name: CI/CD Pipeline
+# name: CI/CD Pipeline
+
+# on:
+#   push:
+#     branches:
+#       - main
+#   pull_request:
+#     branches:
+#       - main
+
+# jobs:
+#   build:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       - name: Set up PHP
+#         uses: shivammathur/setup-php@v2
+#         with:
+#           php-version: 8.2
+
+#       - name: Install dependencies
+#         run: composer install --prefer-dist --no-progress --no-suggest
+
+#       - name: Copy .env example
+#         run: cp .env.example .env
+
+#       - name: Generate app key
+#         run: php artisan key:generate
+
+#       - name: Run migrations
+#         run: php artisan migrate --force
+
+#       - name: Cache Composer dependencies
+#         uses: actions/cache@v2
+#         with:
+#           path: vendor
+#           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+#           restore-keys: ${{ runner.os }}-composer-
+
+#       - name: Cache node modules
+#         uses: actions/cache@v2
+#         with:
+#           path: node_modules
+#           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+#           restore-keys: ${{ runner.os }}-node-
+
+#       - name: Install Node.js
+#         uses: actions/setup-node@v2
+#         with:
+#           node-version: "14"
+
+#       - name: Install NPM dependencies
+#         run: npm install
+
+#       - name: Run NPM build
+#         run: npm run dev
+# name: Laravel Deployment (Username/Password)
+
+# on:
+#   push:
+#     branches: [main]
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+
+#       - name: Copy Username and Password
+#         env:
+#           GCE_USERNAME: ${{ secrets.GCE_USERNAME }}
+#           GCE_PASSWORD: ${{ secrets.GCE_PASSWORD }}
+#         run: |
+#           echo "export GCE_USERNAME=$GCE_USERNAME" >> $GITHUB_ENV
+#           echo "export GCE_PASSWORD=$GCE_PASSWORD" >> $GITHUB_ENV
+
+#       - name: Copy Codebase to Server
+#         run: |
+#           scp -o StrictHostKeyChecking=no -r ./ $GCE_USERNAME@$GCE_HOST:/var/www/html/
+
+#       - name: Install Composer Dependencies
+#         uses: shivmahajan/composer-install@v1
+#         with:
+#           composer-version: "2"
+
+#       - name: Run Artisan Commands
+#         run: |
+#           sshpass -h $GCE_HOST ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $GCE_USERNAME "cd /var/www/html && php artisan migrate:fresh --force && php artisan cache:clear && php artisan config:cache"
+
+# env:
+#   GCE_HOST: 34.122.150.61 # Replace with your public IP
+name: Laravel Deployment (Username/Password - Not Recommended)
 
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+      - name: Load Credentials (Not recommended)
+        run: |
+          echo "export GCE_USERNAME=${{ secrets.GCE_USERNAME }}" >> $GITHUB_ENV  # Consider using secrets instead (more secure)
+          echo "export GCE_PASSWORD=${{ secrets.GCE_PASSWORD }}" >> $GITHUB_ENV  # Consider using secrets instead (more secure)
+
+      - name: Copy Codebase to Server
+        run: |
+          scp -o StrictHostKeyChecking=no -r ./ $GCE_USERNAME@$GCE_HOST:/var/www/html/dabo_bet/
+
+      - name: Install Composer Dependencies
+        uses: shivmahajan/composer-install@v1
         with:
-          php-version: 8.2
+          composer-version: "2"
 
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
+      - name: Run Artisan Commands
+        run: |
+          sshpass -h $GCE_HOST ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $GCE_USERNAME "cd /var/www/html/dabo_bet && php artisan migrate:fresh --force && php artisan cache:clear && php artisan config:cache"
 
-      - name: Copy .env example
-        run: cp .env.example .env
+      - name: Restart Application Service (if applicable)
+        run: |
+          sshpass -h $GCE_HOST ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no $GCE_USERNAME "sudo systemctl restart your_application_service"  # Replace with your service command
 
-      - name: Generate app key
-        run: php artisan key:generate
+env:
+  GCE_HOST: 34.122.150.61 # Replace with your public IP
+# Consider using secrets for GCE_USERNAME and GCE_PASSWORD (more secure)
 
-      - name: Run migrations
-        run: php artisan migrate --force
-
-      - name: Cache Composer dependencies
-        uses: actions/cache@v2
-        with:
-          path: vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Cache node modules
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: ${{ runner.os }}-node-
-
-      - name: Install Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: "14"
-
-      - name: Install NPM dependencies
-        run: npm install
-
-      - name: Run NPM build
-        run: npm run dev
