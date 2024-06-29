@@ -2,21 +2,13 @@
 
 use App\Http\Controllers\DailyInventoryOutController;
 use App\Http\Controllers\InventoryItemController;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Route;;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Route::middleware([
-//     'auth:sanctum',
-//     config('jetstream.auth_session'),
-//     'verified',
-// ])->group(function () {
-//     Route::get('/dashboard', [InventoryItemController::class, 'index'])->name('dashboard');
-// });
 Route::get('/dashboard', [InventoryItemController::class, 'index'])->name('dashboard');
-
 
 Route::get('/inventory', [InventoryItemController::class, 'index'])->name('inventory.index');
 Route::get('/inventory/create', [InventoryItemController::class, 'create'])->name('inventory.create');
@@ -25,7 +17,6 @@ Route::get('/inventory/{post}', [InventoryItemController::class, 'show'])->name(
 Route::get('/inventory/{post}/edit', [InventoryItemController::class, 'edit'])->name('inventory.edit');
 Route::put('/inventory/{post}', [InventoryItemController::class, 'update'])->name('inventory.update');
 Route::delete('/inventory/{post}', [InventoryItemController::class, 'destroy'])->name('inventory.delete');
-
 
 Route::get('/dailyInventoryOut', [DailyInventoryOutController::class, 'index'])->name('dailyInventoryOut.index');
 Route::get('/dailyInventoryOut/create', [DailyInventoryOutController::class, 'create'])->name('dailyInventoryOut.create');

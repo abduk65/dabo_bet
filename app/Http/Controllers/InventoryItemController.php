@@ -18,6 +18,7 @@ class InventoryItemController extends Controller
     {
         $inventoryItems = InventoryItem::all(); // Assuming you want to retrieve all items
         $info = "info";
+
         // Pass the inventory items to the view
         return view('inventory.index', ['name' => 'James', 'inventoryItems' => $inventoryItems]);
     }
@@ -27,7 +28,17 @@ class InventoryItemController extends Controller
      */
     public function create()
     {
-        return view('inventory.create');
+        $brands = new \Illuminate\Database\Eloquent\Collection([
+            (object) ['id' => 1, 'name' => 'Brand A', 'product_type' => 'Type X'],
+            (object) ['id' => 2, 'name' => 'Brand B', 'product_type' => 'Type Y'],
+            (object) ['id' => 3, 'name' => 'Brand C', 'product_type' => 'Type Z'],
+        ]);
+        $units = new \Illuminate\Database\Eloquent\Collection([
+            (object) ['id' => 1, 'name' => 'Brand A', 'product_type' => 'Type X'],
+            (object) ['id' => 2, 'name' => 'Brand B', 'product_type' => 'Type Y'],
+            (object) ['id' => 3, 'name' => 'Brand C', 'product_type' => 'Type Z'],
+        ]);
+        return view('inventory.create', ['units' => $units, 'brands' => $brands]);
     }
 
     /**

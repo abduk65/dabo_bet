@@ -42,19 +42,12 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="mb-2 navbar-nav ms-auto align-items-center navbar-list mb-lg-0">
-                    <li class="me-0 me-xl-2">
-                        <a class="btn btn-primary btn-sm d-flex gap-2 align-items-center" aria-current="page"
-                            href="http://hopeui.iqonic.design/pro?utm_source=hopeui-free-demo&utm_medium=hopeui-free-demo&utm_campaign=hopeui-pro-launch"
-                            target="_blank">
 
-                            Go Pro
-                        </a>
-                    </li>
                     <li class="nav-item dropdown">
                         <a href="#" class="search-toggle nav-link" id="dropdownMenuButton2"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            <img src="../assets/images/Flag/flag001.png" class="img-fluid rounded-circle" alt="user"
-                                style="height: 30px; min-width: 30px; width: 30px;">
+                            <img src="{{ asset('images/Flag/flag001.png') }}" class="img-fluid rounded-circle"
+                                alt="user" style="height: 30px; min-width: 30px; width: 30px;">
                             <span class="bg-primary"></span>
                         </a>
                         <div class="p-0 sub-drop dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton2">
@@ -62,25 +55,25 @@
                                 <div class="p-0 ">
                                     <ul class="p-0 list-group list-group-flush">
                                         <li class="iq-sub-card list-group-item"><a class="p-0" href="#"><img
-                                                    src="../assets/images/Flag/flag-03.png" alt="img-flaf"
+                                                    src="{{ asset('images/Flag/flag-03.png" alt="img-flaf') }}"
                                                     class="img-fluid me-2"
                                                     style="width: 15px;height: 15px;min-width: 15px;" />Spanish</a>
                                         </li>
                                         <li class="iq-sub-card list-group-item"><a class="p-0" href="#"><img
-                                                    src="../assets/images/Flag/flag-04.png" alt="img-flaf"
+                                                    src="{{ asset('images/Flag/flag-04.png" alt="img-flaf') }}"
                                                     class="img-fluid me-2"
                                                     style="width: 15px;height: 15px;min-width: 15px;" />Italian</a>
                                         </li>
                                         <li class="iq-sub-card list-group-item"><a class="p-0" href="#"><img
-                                                    src="../assets/images/Flag/flag-02.png" alt="img-flaf"
+                                                    src="{{ asset('images/Flag/flag-02.png" alt="img-flaf') }}"
                                                     class="img-fluid me-2"
                                                     style="width: 15px;height: 15px;min-width: 15px;" />French</a></li>
                                         <li class="iq-sub-card list-group-item"><a class="p-0" href="#"><img
-                                                    src="../assets/images/Flag/flag-05.png" alt="img-flaf"
+                                                    src="{{ asset('images/Flag/flag-05.png" alt="img-flaf') }}"
                                                     class="img-fluid me-2"
                                                     style="width: 15px;height: 15px;min-width: 15px;" />German</a></li>
                                         <li class="iq-sub-card list-group-item"><a class="p-0" href="#"><img
-                                                    src="../assets/images/Flag/flag-06.png" alt="img-flaf"
+                                                    src="{{ asset('images/Flag/flag-06.png" alt="img-flaf') }}"
                                                     class="img-fluid me-2"
                                                     style="width: 15px;height: 15px;min-width: 15px;" />Japanese</a>
                                         </li>
@@ -241,17 +234,17 @@
                     <li class="nav-item dropdown">
                         <a class="py-0 nav-link d-flex align-items-center" href="#" id="navbarDropdown"
                             role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="../assets/images/avatars/01.png" alt="User-Profile"
+                            <img src="{{ asset('images/avatars/01.png') }}" alt="User-Profile"
                                 class="theme-color-default-img img-fluid avatar avatar-50 avatar-rounded">
-                            <img src="../assets/images/avatars/avtar_1.png" alt="User-Profile"
+                            <img src="{{ asset('images/avatars/avtar_1.png') }}" alt="User-Profile"
                                 class="theme-color-purple-img img-fluid avatar avatar-50 avatar-rounded">
-                            <img src="../assets/images/avatars/avtar_2.png" alt="User-Profile"
+                            <img src="{{ asset('images/avatars/avtar_2.png') }}" alt="User-Profile"
                                 class="theme-color-blue-img img-fluid avatar avatar-50 avatar-rounded">
-                            <img src="../assets/images/avatars/avtar_4.png" alt="User-Profile"
+                            <img src="{{ asset('images/avatars/avtar_4.png') }}" alt="User-Profile"
                                 class="theme-color-green-img img-fluid avatar avatar-50 avatar-rounded">
-                            <img src="../assets/images/avatars/avtar_5.png" alt="User-Profile"
+                            <img src="{{ asset('images/avatars/avtar_5.png') }}" alt="User-Profile"
                                 class="theme-color-yellow-img img-fluid avatar avatar-50 avatar-rounded">
-                            <img src="../assets/images/avatars/avtar_3.png" alt="User-Profile"
+                            <img src="{{ asset('images/avatars/avtar_3.png') }}" alt="User-Profile"
                                 class="theme-color-pink-img img-fluid avatar avatar-50 avatar-rounded">
                             <div class="caption ms-3 d-none d-md-block ">
                                 <h6 class="mb-0 caption-title">Austin Robertson</h6>
@@ -265,7 +258,10 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="../dashboard/auth/sign-in.html">Logout</a></li>
+                            <li>
+                                <form action="{{ route('logout') }}" method="post">@csrf<button type="submit"
+                                        class="dropdown-item">Logout</button></form>
+                            </li>
                         </ul>
                     </li>
                 </ul>
@@ -292,17 +288,17 @@
             </div>
         </div>
         <div class="iq-header-img">
-            <img src="../assets/images/dashboard/top-header.png" alt="header"
+            <img src="{{ asset('images/dashboard/top-header.png') }}" alt="header"
                 class="theme-color-default-img img-fluid w-100 h-100 animated-scaleX">
-            <img src="../assets/images/dashboard/top-header1.png" alt="header"
+            <img src="{{ asset('images/dashboard/top-header1.png') }}" alt="header"
                 class="theme-color-purple-img img-fluid w-100 h-100 animated-scaleX">
-            <img src="../assets/images/dashboard/top-header2.png" alt="header"
+            <img src="{{ asset('images/dashboard/top-header2.png') }}" alt="header"
                 class="theme-color-blue-img img-fluid w-100 h-100 animated-scaleX">
-            <img src="../assets/images/dashboard/top-header3.png" alt="header"
+            <img src="{{ asset('images/dashboard/top-header3.png') }}" alt="header"
                 class="theme-color-green-img img-fluid w-100 h-100 animated-scaleX">
-            <img src="../assets/images/dashboard/top-header4.png" alt="header"
+            <img src="{{ asset('images/dashboard/top-header4.png') }}" alt="header"
                 class="theme-color-yellow-img img-fluid w-100 h-100 animated-scaleX">
-            <img src="../assets/images/dashboard/top-header5.png" alt="header"
+            <img src="{{ asset('images/dashboard/top-header5.png') }}" alt="header"
                 class="theme-color-pink-img img-fluid w-100 h-100 animated-scaleX">
         </div>
     </div> <!-- Nav Header Component End -->

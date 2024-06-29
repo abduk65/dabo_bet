@@ -36,10 +36,11 @@
         @yield('content')
 
         <!-- Footer Section Start -->
-        <footer class="footer">
-            @include('layouts.footer')
-        </footer>
+
     </main>
+    <footer class="footer">
+        @include('layouts.footer')
+    </footer>
     @include('layouts.scripts')
 
 </body>

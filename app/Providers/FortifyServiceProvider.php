@@ -12,6 +12,10 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Fortify;
+use Illuminate\Support\Facades\Route;
+
+use Laravel\Fortify\Http\Controllers\AuthenticatedSessionController;
+use laravel\Fortify\Http\Controllers\RegisteredUserController;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -33,8 +37,19 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
+        // Route::post('/login', [AuthenticatedSessionController::class, 'store'])
+        //     ->middleware(['guest'])
+        //     ->name('login');
+
+        // Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])
+        //     ->name('logout');
+
+        // Route::post('/register', [RegisteredUserController::class, 'store'])
+        //     ->middleware(['guest'])
+        //     ->name('register');
+
         RateLimiter::for('login', function (Request $request) {
-            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())).'|'.$request->ip());
+            $throttleKey = Str::transliterate(Str::lower($request->input(Fortify::username())) . '|' . $request->ip());
 
             return Limit::perMinute(5)->by($throttleKey);
         });
