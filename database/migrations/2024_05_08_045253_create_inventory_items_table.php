@@ -14,13 +14,17 @@ return new class extends Migration
         Schema::create('inventory_items', function (Blueprint $table) {
             $table->id();
             $table->string('item_name');
-            $table->string('unit');
+            $table->foreignId('brand_id');
+            $table->foreignId('unit_id');
             $table->float('quantity');
             $table->float('price');
             $table->float('total_price');
+            $table->foreignId('user_id');
             $table->timestamps();
         });
     }
+
+    //TODO: Add a batch malekiya nullable date
 
     /**
      * Reverse the migrations.

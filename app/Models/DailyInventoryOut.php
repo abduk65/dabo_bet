@@ -10,8 +10,18 @@ class DailyInventoryOut extends Model
     use HasFactory;
 
 
-    public function InventoryItem()
+    public function inventoryItem()
     {
-        return $this->hasMany(InventoryItem::class);
+        return $this->belongsTo(InventoryItem::class);
+    }
+
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

@@ -11,6 +11,21 @@ class InventoryItem extends Model
 
     public function dailyInventoryOut()
     {
-        return $this->hasOne(DailyInventoryOut::class);
+        return $this->hasMany(DailyInventoryOut::class);
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class);
+    }
+
+    public function unit()
+    {
+        return $this->belongsTo(Unit::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }
