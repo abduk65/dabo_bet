@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Http\Requests\StoreBrandRequest;
 use App\Http\Requests\UpdateBrandRequest;
+use App\Models\ProductType;
+use Illuminate\Support\Facades\Gate;
 
 class BrandController extends Controller
 {
@@ -13,6 +15,8 @@ class BrandController extends Controller
      */
     public function index()
     {
+        $brands = Brand::all();
+        return view('brands.index', ['brands' => $brands]);
         //
     }
 
@@ -21,7 +25,8 @@ class BrandController extends Controller
      */
     public function create()
     {
-        //
+        $productType = ProductType::all();
+        return view('brands.create', compact('productType'));
     }
 
     /**
@@ -29,7 +34,13 @@ class BrandController extends Controller
      */
     public function store(StoreBrandRequest $request)
     {
-        //
+        Gate::authorize('create', Brand::class);
+        $brand = new Brand();
+        $brand->name = $request->name;
+        $brand->product_type_id = $request->product_type;
+        $brand->save();
+
+        return redirect()->back();
     }
 
     /**

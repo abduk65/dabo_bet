@@ -19,9 +19,11 @@ class DailyInventoryOutFactory extends Factory
         return [
             "quantity" => $this->faker->numberBetween(10, 20),
             "inventory_item_id" => $this->faker->randomElement(\App\Models\InventoryItem::all()->pluck('id')),
-            "user_id" => $this->faker->randomElement(\App\Models\User::all()->pluck(
-                'id'
-            ))
+            "user_id" => $this->faker->randomElement(
+                \App\Models\User::all()->pluck(
+                    'id'
+                )
+            )
         ];
     }
 }

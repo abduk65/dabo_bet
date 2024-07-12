@@ -6,6 +6,8 @@ use App\Models\DailyInventoryOut;
 use App\Http\Requests\StoreDailyInventoryOutRequest;
 use App\Http\Requests\UpdateDailyInventoryOutRequest;
 use App\Models\InventoryItem;
+use App\Models\Unit;
+use App\Models\User;
 
 class DailyInventoryOutController extends Controller
 {
@@ -23,8 +25,11 @@ class DailyInventoryOutController extends Controller
      */
     public function create()
     {
-        $inventoryItem = InventoryItem::all();
-        return view('dailyInventoryOut.create', compact('inventoryItem'));
+        $inventoryItems = InventoryItem::all();
+        $users = User::all();
+        $units = Unit::all();
+
+        return view('dailyInventoryOut.create', compact('inventoryItems', 'users', 'units'));
     }
 
     /**
@@ -33,9 +38,11 @@ class DailyInventoryOutController extends Controller
     public function store(StoreDailyInventoryOutRequest $request)
     {
         $daily = new DailyInventoryOut();
-        $daily->inventory_items_id = $request->inventory_item_id;
+        $daily->inventory_item_id = $request->inventory_item;
         $daily->quantity = $request->quantity;
-        $daily->user_id = 1;
+        $daily->unit_id = $request->unit;
+        $daily->user_id = auth()->user()->id;
+        $daily->receiver_user_id = $request->receiver_user;
         $daily->save();
 
         // Redirect back with a success message

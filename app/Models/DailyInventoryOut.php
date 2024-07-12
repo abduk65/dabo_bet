@@ -24,4 +24,9 @@ class DailyInventoryOut extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function receiver_user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

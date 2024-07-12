@@ -60,7 +60,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link " aria-current="page" href="{{ route('inventory.index') }}">
-                        <span class="item-name">INVENTORY</span>
+                        <span class="item-name">Inventory</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -69,6 +69,21 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link " aria-current="page" href="{{ route('brand.index') }}">
+                        <span class="item-name">Brand</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " aria-current="page" href="{{ route('unit.index') }}">
+                        <span class="item-name">Unit</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " aria-current="page" href="{{ route('productType.index') }}">
+                        <span class="item-name">Product Type</span>
+                    </a>
+                </li>
             </ul>
             <!-- Sidebar Menu End -->
         </div>

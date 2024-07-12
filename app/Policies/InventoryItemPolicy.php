@@ -13,7 +13,7 @@ class InventoryItemPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        return $user->hasPermission('read', InventoryItem::class);
     }
 
     /**
@@ -21,7 +21,7 @@ class InventoryItemPolicy
      */
     public function view(User $user, InventoryItem $inventoryItem): bool
     {
-        return true;
+        return $user->hasPermission('read', InventoryItem::class);
     }
 
     /**
@@ -29,7 +29,7 @@ class InventoryItemPolicy
      */
     public function create(User $user): bool
     {
-        return true;
+        return $user->hasPermission('store', InventoryItem::class);
     }
 
     /**
@@ -37,7 +37,7 @@ class InventoryItemPolicy
      */
     public function update(User $user, InventoryItem $inventoryItem): bool
     {
-        return true;
+        return $user->hasPermission('update', InventoryItem::class);
     }
 
     /**
@@ -45,7 +45,7 @@ class InventoryItemPolicy
      */
     public function delete(User $user, InventoryItem $inventoryItem): bool
     {
-        return true;
+        return $user->hasPermission('delete', InventoryItem::class);
     }
 
     /**
@@ -53,7 +53,7 @@ class InventoryItemPolicy
      */
     public function restore(User $user, InventoryItem $inventoryItem): bool
     {
-        return true;
+        return $user->hasPermission('read', InventoryItem::class);
     }
 
     /**
@@ -61,6 +61,6 @@ class InventoryItemPolicy
      */
     public function forceDelete(User $user, InventoryItem $inventoryItem): bool
     {
-        return true;
+        return $user->hasPermission('read', InventoryItem::class);
     }
 }

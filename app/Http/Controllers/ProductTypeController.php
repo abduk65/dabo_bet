@@ -13,7 +13,11 @@ class ProductTypeController extends Controller
      */
     public function index()
     {
-        //
+        $productTypes = ProductType::all();
+        return view(
+            'productType.index',
+            ['productTypes' => $productTypes]
+        );
     }
 
     /**
@@ -21,7 +25,7 @@ class ProductTypeController extends Controller
      */
     public function create()
     {
-        //
+        return view('productType.create');
     }
 
     /**
@@ -29,7 +33,9 @@ class ProductTypeController extends Controller
      */
     public function store(StoreProductTypeRequest $request)
     {
-        //
+        $productType = new ProductType;
+        $productType->create($request->only('name'));
+        return redirect()->back();
     }
 
     /**

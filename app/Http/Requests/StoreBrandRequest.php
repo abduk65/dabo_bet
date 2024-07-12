@@ -3,6 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Brand;
+
+use Illuminate\Support\Facades\Gate;
 
 class StoreBrandRequest extends FormRequest
 {
@@ -11,7 +14,7 @@ class StoreBrandRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**

@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\InventoryItem;
 use App\Http\Requests\StoreInventoryItemRequest;
 use App\Http\Requests\UpdateInventoryItemRequest;
+use App\Models\Brand;
+use App\Models\Unit;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class InventoryItemController extends Controller
@@ -16,11 +19,11 @@ class InventoryItemController extends Controller
      */
     public function index()
     {
+        Gate::authorize('viewAny', InventoryItem::class);
         $inventoryItems = InventoryItem::all(); // Assuming you want to retrieve all items
-        $info = "info";
 
         // Pass the inventory items to the view
-        return view('inventory.index', ['name' => 'James', 'inventoryItems' => $inventoryItems]);
+        return view('inventory.index', ['inventoryItems' => $inventoryItems]);
     }
 
     /**
@@ -28,16 +31,11 @@ class InventoryItemController extends Controller
      */
     public function create()
     {
-        $brands = new \Illuminate\Database\Eloquent\Collection([
-            (object) ['id' => 1, 'name' => 'Brand A', 'product_type' => 'Type X'],
-            (object) ['id' => 2, 'name' => 'Brand B', 'product_type' => 'Type Y'],
-            (object) ['id' => 3, 'name' => 'Brand C', 'product_type' => 'Type Z'],
-        ]);
-        $units = new \Illuminate\Database\Eloquent\Collection([
-            (object) ['id' => 1, 'name' => 'Brand A', 'product_type' => 'Type X'],
-            (object) ['id' => 2, 'name' => 'Brand B', 'product_type' => 'Type Y'],
-            (object) ['id' => 3, 'name' => 'Brand C', 'product_type' => 'Type Z'],
-        ]);
+        // Gate::authorize('create', InventoryItem::class);
+
+        $brands = Brand::all();
+        $units = Unit::all();
+
         return view('inventory.create', ['units' => $units, 'brands' => $brands]);
     }
 
@@ -46,20 +44,22 @@ class InventoryItemController extends Controller
      */
     public function store(StoreInventoryItemRequest $request)
     {
+        Gate::authorize('create', InventoryItem::class);
 
-        // Gate::authorize('create', $request);
-        $validatedData = $request->validate([
-            'item_name' => 'required|string|max:255',
-            'unit' => 'required|string|max:50',
-            'quantity' => 'required|numeric',
-            'price' => 'required|numeric',
-        ]);
+        $previousLastBatch = 1;
+        $pre = InventoryItem::where('brand_id', $request->brand)->orderBy('batch_number', 'asc')->pluck('batch_number');
 
+        $previousLastBatch = $pre->last();
+        // dd($previousInventoryBrand);
+        $previousLastBatch += 1;
         // Store the inventory input in the database
         $inventoryInput = new InventoryItem();
         $inventoryInput->item_name = $request->item_name;
-        $inventoryInput->unit = $request->unit;
+        $inventoryInput->unit_id =  $request->unit;
+        $inventoryInput->brand_id =  $request->brand;
         $inventoryInput->quantity = $request->quantity;
+        $inventoryInput->user_id = auth()->id();
+        $inventoryInput->batch_number = $previousLastBatch;
         $inventoryInput->price = $request->price;
         $inventoryInput->total_price = $request->price * $request->quantity;
         $inventoryInput->save();
@@ -73,6 +73,8 @@ class InventoryItemController extends Controller
      */
     public function show(InventoryItem $inventoryItem)
     {
+        Gate::authorize('view', InventoryItem::class);
+
         return 'shown';
     }
 
@@ -81,7 +83,7 @@ class InventoryItemController extends Controller
      */
     public function edit(InventoryItem $inventoryItem)
     {
-        //
+        Gate::authorize('view', InventoryItem::class);
     }
 
     /**
@@ -89,7 +91,7 @@ class InventoryItemController extends Controller
      */
     public function update(UpdateInventoryItemRequest $request, InventoryItem $inventoryItem)
     {
-        //
+        Gate::authorize('update', InventoryItem::class);
     }
 
     /**
@@ -97,6 +99,6 @@ class InventoryItemController extends Controller
      */
     public function destroy(InventoryItem $inventoryItem)
     {
-        //
+        Gate::authorize('delete', InventoryItem::class);
     }
 }
