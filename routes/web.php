@@ -4,11 +4,14 @@ use App\Http\Controllers\BrandController;
 use App\Http\Controllers\DailyInventoryOutController;
 use App\Http\Controllers\InventoryItemController;
 use App\Http\Controllers\ProductTypeController;
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UnitController;
 use App\Models\InventoryItem;
 use App\Models\ProductType;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;;
+use Illuminate\Support\Facades\Route;
+
+;
 
 Route::get('/', function () {
     // $user = Auth::user();
@@ -21,6 +24,14 @@ Route::get(
     '/user_role',
     function () {
         echo auth()->user()->role;
+    }
+);
+
+Route::get(
+    '/logout',
+    function () {
+        Auth::logout();
+        return redirect(route('/'));
     }
 );
 
@@ -47,4 +58,5 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('brand', BrandController::class);
     Route::resource('unit', UnitController::class);
     Route::resource('productType', ProductTypeController::class);
+    Route::resource('product', ProductController::class);
 });

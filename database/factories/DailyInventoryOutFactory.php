@@ -23,7 +23,8 @@ class DailyInventoryOutFactory extends Factory
                 \App\Models\User::all()->pluck(
                     'id'
                 )
-            )
+            ),
+            'unit_id' => $this->faker->randomElement(\App\Models\Unit::all()->pluck('id')),
         ];
     }
 }

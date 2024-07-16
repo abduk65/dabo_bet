@@ -68,7 +68,11 @@
                         <span class="item-name">Daily Inventory Out</span>
                     </a>
                 </li>
-
+                <li class="nav-item">
+                    <a class="nav-link " aria-current="page" href="{{ route('product.index') }}">
+                        <span class="item-name">Product</span>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link " aria-current="page" href="{{ route('brand.index') }}">
                         <span class="item-name">Brand</span>
