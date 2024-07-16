@@ -6,9 +6,9 @@ use App\Http\Controllers\InventoryItemController;
 use App\Http\Controllers\ProductTypeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RecipeController;
+use App\Http\Controllers\StandardBatchVarietyController;
 use App\Http\Controllers\UnitController;
-use App\Models\InventoryItem;
-use App\Models\ProductType;
+use App\Http\Controllers\WorkOrderController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -61,4 +61,6 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('productType', ProductTypeController::class);
     Route::resource('product', ProductController::class);
     Route::resource('recipe', RecipeController::class);
+    Route::resource('workOrder', WorkOrderController::class);
+    Route::resource('standardBatchVariety', StandardBatchVarietyController::class);
 });

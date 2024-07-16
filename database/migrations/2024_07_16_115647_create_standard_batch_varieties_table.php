@@ -10,8 +10,12 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('recipes', function (Blueprint $table) {
-            $table->text('instruction')->nullable();
+        Schema::create('standard_batch_varieties', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->default('default');
+            $table->foreignId('recipe_id');
+            $table->float('single_factor_expected_output');
+            $table->timestamps();
         });
     }
 
@@ -20,8 +24,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('recipe', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('standard_batch_varieties');
     }
 };

@@ -26,7 +26,9 @@ class RecipeController extends Controller
      */
     public function create()
     {
-        //TODO KE SHOW RECIPE PAGE  MIMETAWN CREATE REQUEST PRE POPULATE IT WITH THAT SPECIFIC PRODUCT. JUST FOR CONVENIENCE
+        // TODO: FIX THE BLADE FILE TO BE REFACTORED TO USE COMPONENTS TO CREATE THE NEW RECIPE DROPDOWN EVERYTIME OR ATLEAST CLEANER JQUERY CODE METEQEM AND IF WE CAN SEPARATE ARGO DATA TRANSPORT MAREG
+
+        // TODO KE SHOW RECIPE PAGE  MIMETAWN CREATE REQUEST PRE POPULATE IT WITH THAT SPECIFIC PRODUCT. JUST FOR CONVENIENCE
         $unit = Unit::all();
         $products = Product::all();
         $inventoryItems = InventoryItem::all();
@@ -51,7 +53,7 @@ class RecipeController extends Controller
         $recipe = Recipe::create([
             'product_id' => $request->product_id,
             'name' => $request->name,
-            // 'instructions' => $request->instructions,
+            'instruction' => $request->instruction,
         ]);
 
         foreach ($request->inventory_item_id as $index => $inventoryItemId) {

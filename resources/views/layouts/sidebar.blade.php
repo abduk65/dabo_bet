@@ -79,6 +79,16 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link " aria-current="page" href="{{ route('workOrder.index') }}">
+                        <span class="item-name">Work Order</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link " aria-current="page" href="{{ route('standardBatchVariety.index') }}">
+                        <span class="item-name">Standard Batch Variety</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link " aria-current="page" href="{{ route('brand.index') }}">
                         <span class="item-name">Brand</span>
                     </a>
