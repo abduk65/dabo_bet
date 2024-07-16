@@ -10,7 +10,6 @@
 <!-- mapchart Script -->
 <script src="{{ asset('js/charts/vectore-chart.js') }}"></script>
 <script src="{{ asset('/js/charts/dashboard.js') }}"></script>
-
 <!-- fslightbox Script -->
 <script src="{{ asset('/js/plugins/fslightbox.js') }}"></script>
 
@@ -34,3 +33,4 @@
 
 
 <script src="{{ asset('js/plugins/prism.mini.js') }}"></script>
+<script src="{{ asset('js/custom/app.js') }}"></script>

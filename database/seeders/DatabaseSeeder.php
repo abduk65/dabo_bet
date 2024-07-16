@@ -36,13 +36,14 @@ class DatabaseSeeder extends Seeder
         //     'two_factor_recovery_codes' => null,
         //     'remember_token' => Str::random(10),
         //     'profile_photo_path' => null,
-        //     'role' => 'store_keeper',
+        //     'role' => 'admin',
 
         // ]);
         $this->call(UnitSeeder::class);
         $this->call(ProductTypeSeeder::class);
+        $this->call(BrandSeeder::class);
         $this->call(ProductSeeder::class);
-        Brand::factory()->count(10)->create();
+        // Brand::factory()->count(10)->create();
         InventoryItem::factory()->count(40)->create();
         DailyInventoryOut::factory()->count(50)->create();
         Recipe::factory()->count(10)->create();

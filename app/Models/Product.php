@@ -9,4 +9,9 @@ class Product extends Model
 {
     use HasFactory;
     protected $guarded = [];
+
+    public function recipe()
+    {
+        return $this->hasMany(Recipe::class);
+    }
 }

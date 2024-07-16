@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\InventoryItem;
+use App\Models\Product;
 use App\Models\Recipe;
+use App\Models\Unit;
 use App\Http\Requests\StoreRecipeRequest;
 use App\Http\Requests\UpdateRecipeRequest;
+use App\Models\RecipeInventoryItem;
 
 class RecipeController extends Controller
 {
@@ -13,7 +17,8 @@ class RecipeController extends Controller
      */
     public function index()
     {
-        //
+        $recipes = Recipe::all();
+        return view("recipe.index", compact("recipes"));
     }
 
     /**
@@ -21,7 +26,12 @@ class RecipeController extends Controller
      */
     public function create()
     {
-        //
+        //TODO KE SHOW RECIPE PAGE  MIMETAWN CREATE REQUEST PRE POPULATE IT WITH THAT SPECIFIC PRODUCT. JUST FOR CONVENIENCE
+        $unit = Unit::all();
+        $products = Product::all();
+        $inventoryItems = InventoryItem::all();
+
+        return view("recipe.create", compact("products", "inventoryItems", "unit"));
     }
 
     /**
@@ -29,7 +39,30 @@ class RecipeController extends Controller
      */
     public function store(StoreRecipeRequest $request)
     {
-        //
+        // dd($request->all());
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'name' => 'required|string|max:255',
+            'instructions' => 'nullable|string',
+            'inventory_item_id.*' => 'required|exists:inventory_items,id',
+            'quantity.*' => 'required|integer|min:1',
+        ]);
+        //TODO: CLEAN UP THIS JUMBLED MESS OF A RELATIONSHIP
+        $recipe = Recipe::create([
+            'product_id' => $request->product_id,
+            'name' => $request->name,
+            // 'instructions' => $request->instructions,
+        ]);
+
+        foreach ($request->inventory_item_id as $index => $inventoryItemId) {
+            $recipe->inventoryItems()->attach($inventoryItemId, [
+                'quantity' => $request->quantity[$index],
+                'unit_id' => $request->unit_id[$index],
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Recipe created successfully!');
+
     }
 
     /**
@@ -37,7 +70,9 @@ class RecipeController extends Controller
      */
     public function show(Recipe $recipe)
     {
-        //
+        // $recipeII = RecipeInventoryItem::find($recipe->id);
+        $recipe = Recipe::with('inventoryItems')->findOrFail($recipe->id);
+        return view("recipe.show", compact("recipe"));
     }
 
     /**

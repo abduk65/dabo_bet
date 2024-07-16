@@ -5,6 +5,7 @@ use App\Http\Controllers\DailyInventoryOutController;
 use App\Http\Controllers\InventoryItemController;
 use App\Http\Controllers\ProductTypeController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\UnitController;
 use App\Models\InventoryItem;
 use App\Models\ProductType;
@@ -59,4 +60,5 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('unit', UnitController::class);
     Route::resource('productType', ProductTypeController::class);
     Route::resource('product', ProductController::class);
+    Route::resource('recipe', RecipeController::class);
 });

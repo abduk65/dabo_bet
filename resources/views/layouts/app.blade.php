@@ -41,6 +41,8 @@
     <footer class="footer">
         @include('layouts.footer')
     </footer>
+
+    @yield('scripts')
     @include('layouts.scripts')
 
 </body>

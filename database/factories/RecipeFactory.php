@@ -20,6 +20,7 @@ class RecipeFactory extends Factory
         return [
             "name" => "Recipe " . $this->faker->randomLetter(),
             "product_id" => $this->faker->randomElement(Product::all()->pluck("id")),
+            "instruction" => $this->faker->text(250)
         ];
     }
 }

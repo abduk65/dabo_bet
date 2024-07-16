@@ -74,6 +74,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link " aria-current="page" href="{{ route('recipe.index') }}">
+                        <span class="item-name">Recipe</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link " aria-current="page" href="{{ route('brand.index') }}">
                         <span class="item-name">Brand</span>
                     </a>
