@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\CommissionRecipient;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,10 @@ class CommissionFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'product_id' => $this->faker->randomElement(Product::all('id')),
+            'discount_amount' => $this->faker->randomFloat(2, 0, 1),
+            'commission_recipient_id' => $this->faker->randomElement(CommissionRecipient::all()->pluck('id')),
+            'status' => $this->faker->randomElement(['active', 'inactive'])
         ];
     }
 }

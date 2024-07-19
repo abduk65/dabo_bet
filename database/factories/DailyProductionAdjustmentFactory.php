@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,14 @@ class DailyProductionAdjustmentFactory extends Factory
      */
     public function definition(): array
     {
+        $date = $this->faker->dateTimeBetween("-6 months", "now");
         return [
-            //
+            'type' => $this->faker->randomElement(['damaged', 'stale', 'worker_error']),
+            'product_id' => $this->faker->randomElement(Product::all()->pluck('id')),
+            'quantity' => $this->faker->numberBetween(50, 250),
+            'unit_id' => 3,
+            'created_at' => $date,
+            'updated_at' => $date,
         ];
     }
 }

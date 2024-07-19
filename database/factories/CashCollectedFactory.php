@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Branch;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +17,12 @@ class CashCollectedFactory extends Factory
      */
     public function definition(): array
     {
+        $date = $this->faker->dateTimeBetween("-6 months", "now");
         return [
-            //
+            'branch_id' => $this->faker->randomElement(Branch::all()->pluck('id')->toArray()),
+            'amount' => $this->faker->randomFloat(2, 0, 50000),
+            'created_at' => $date,
+            'updated_at' => $date
         ];
     }
 }

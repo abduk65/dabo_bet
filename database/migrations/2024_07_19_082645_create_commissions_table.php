@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,6 +12,13 @@ return new class extends Migration
     {
         Schema::create('commissions', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('product_id');
+            $table->float('discount_amount');
+            $table->foreignId('commission_recipient_id');
+            $table->enum('status', [
+                'active',
+                'inactive'
+            ]);
             $table->timestamps();
         });
     }

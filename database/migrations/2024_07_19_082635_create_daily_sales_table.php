@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -13,6 +12,12 @@ return new class extends Migration
     {
         Schema::create('daily_sales', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('product_id');
+            $table->float('quantity');
+            $table->float('adari');
+            $table->foreignId('branch_id');
+            $table->foreignId('commission_id');
+            $table->float('commission_quantity');
             $table->timestamps();
         });
     }
