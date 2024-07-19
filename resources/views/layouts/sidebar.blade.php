@@ -98,6 +98,55 @@
                         <span class="item-name">Unit</span>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " aria-current="page" href="{{ route('branch.index') }}">
+                        <span class="item-name">Branch</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " aria-current="page" href="{{ route('expense.index') }}">
+                        <span class="item-name">expense</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " aria-current="page" href="{{ route('dailyProductionAdjustment.index') }}">
+                        <span class="item-name">dailyProductionAdjustment</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " aria-current="page" href="{{ route('inventoryAdjustment.index') }}">
+                        <span class="item-name">inventoryAdjustment</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " aria-current="page" href="{{ route('cashCollected.index') }}">
+                        <span class="item-name">cashCollected</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " aria-current="page" href="{{ route('dailySales.create') }}">
+                        <span class="item-name">dailySales</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " aria-current="page" href="{{ route('commissionRecipient.index') }}">
+                        <span class="item-name">commissionRecipient</span>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link " aria-current="page" href="{{ route('commission.index') }}">
+                        <span class="item-name">commission</span>
+                    </a>
+                </li>
+
                 <li class="nav-item">
                     <a class="nav-link " aria-current="page" href="{{ route('productType.index') }}">
                         <span class="item-name">Product Type</span>

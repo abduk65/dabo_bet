@@ -86,4 +86,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(DailyInventoryOut::class);
     }
+
+    public function expense(): HasMany
+    {
+        return $this->hasMany(Expense::class);
+    }
 }

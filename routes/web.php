@@ -1,7 +1,17 @@
 <?php
+use App\Http\Controllers\DailyProductionAdjustmentController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\BranchController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\CashCollectedController;
+use App\Http\Controllers\CommissionController;
+use App\Http\Controllers\CommissionRecipientController;
 use App\Http\Controllers\DailyInventoryOutController;
+use App\Http\Controllers\DailySalesController;
+use App\Http\Controllers\ExpenseController;
+use App\Http\Controllers\InventoryAdjustmentController;
 use App\Http\Controllers\InventoryItemController;
 use App\Http\Controllers\ProductTypeController;
 use App\Http\Controllers\ProductController;
@@ -9,8 +19,6 @@ use App\Http\Controllers\RecipeController;
 use App\Http\Controllers\StandardBatchVarietyController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\WorkOrderController;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
 
 ;
 
@@ -63,4 +71,16 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('recipe', RecipeController::class);
     Route::resource('workOrder', WorkOrderController::class);
     Route::resource('standardBatchVariety', StandardBatchVarietyController::class);
+
+    Route::resource('branch', BranchController::class);
+    Route::resource('dailyProductionAdjustment', DailyProductionAdjustmentController::class);
+    Route::resource('inventoryAdjustment', InventoryAdjustmentController::class);
+
+    Route::resource('expense', ExpenseController::class);
+    Route::resource('cashCollected', CashCollectedController::class);
+    Route::resource('dailySales', DailySalesController::class);
+    Route::resource('commissionRecipient', CommissionRecipientController::class);
+
+    Route::resource('commission', CommissionController::class);
+
 });

@@ -23,6 +23,7 @@ class DailyProductionAdjustmentFactory extends Factory
             'product_id' => $this->faker->randomElement(Product::all()->pluck('id')),
             'quantity' => $this->faker->numberBetween(50, 250),
             'unit_id' => 3,
+
             'created_at' => $date,
             'updated_at' => $date,
         ];

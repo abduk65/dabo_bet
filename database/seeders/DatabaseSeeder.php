@@ -69,8 +69,8 @@ class DatabaseSeeder extends Seeder
 
         // WorkOrder::factory()->count(50)->create();
 
-        // DailyProductionAdjustment::factory()->count(10)->create();
-        // InventoryAdjustment::factory()->count(25)->create();
+        DailyProductionAdjustment::factory()->count(10)->create();
+        InventoryAdjustment::factory()->count(25)->create();
         // Expense::factory(50)->create();
         // CashCollected::factory(150)->create();
 

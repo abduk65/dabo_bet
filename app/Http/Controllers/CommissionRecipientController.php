@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use App\Models\CommissionRecipient;
 use App\Http\Requests\StoreCommissionRecipientRequest;
 use App\Http\Requests\UpdateCommissionRecipientRequest;
@@ -13,7 +14,8 @@ class CommissionRecipientController extends Controller
      */
     public function index()
     {
-        //
+        $commissionRecipients = CommissionRecipient::all();
+        return view("commissionRecipient.index", compact("commissionRecipients"));
     }
 
     /**
@@ -21,7 +23,8 @@ class CommissionRecipientController extends Controller
      */
     public function create()
     {
-        //
+        $branches = Branch::all();
+        return view("commissionRecipient.create", compact("branches"));
     }
 
     /**
@@ -29,7 +32,14 @@ class CommissionRecipientController extends Controller
      */
     public function store(StoreCommissionRecipientRequest $request)
     {
-        //
+        CommissionRecipient::create(
+            $request->only(
+                'name',
+                'branch_id'
+            )
+        );
+
+        return redirect()->back()->with('success', 'success');
     }
 
     /**

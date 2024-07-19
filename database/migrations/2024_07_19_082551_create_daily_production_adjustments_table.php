@@ -16,6 +16,7 @@ return new class extends Migration {
             $table->float('quantity');
             $table->foreignId('unit_id');
             $table->enum('type', ['damaged', 'stale', 'worker_error']);
+            $table->string('remark')->nullable();
             $table->timestamps();
         });
     }

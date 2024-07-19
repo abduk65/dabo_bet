@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use App\Models\Expense;
 use App\Http\Requests\StoreExpenseRequest;
 use App\Http\Requests\UpdateExpenseRequest;
+use App\Models\User;
 
 class ExpenseController extends Controller
 {
@@ -13,7 +15,8 @@ class ExpenseController extends Controller
      */
     public function index()
     {
-        //
+        $expenses = Expense::all();
+        return view("expense.index", compact("expenses"));
     }
 
     /**
@@ -21,7 +24,9 @@ class ExpenseController extends Controller
      */
     public function create()
     {
-        //
+        $users = User::all();
+        $branches = Branch::all();
+        return view('expense.create', compact('users', 'branches'));
     }
 
     /**
@@ -29,7 +34,8 @@ class ExpenseController extends Controller
      */
     public function store(StoreExpenseRequest $request)
     {
-        //
+        Expense::create($request->only('amount', 'user_id', 'description', 'branch_id'));
+        return redirect()->back()->with('success', 'succeeded');
     }
 
     /**

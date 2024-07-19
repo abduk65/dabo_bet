@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\DailyProductionAdjustment;
+use App\Models\Product;
+use App\Models\Unit;
 use App\Http\Requests\StoreDailyProductionAdjustmentRequest;
 use App\Http\Requests\UpdateDailyProductionAdjustmentRequest;
 
@@ -13,7 +15,8 @@ class DailyProductionAdjustmentController extends Controller
      */
     public function index()
     {
-        //
+        $dailyProductionAdjustments = DailyProductionAdjustment::all();
+        return view("dailyProductionAdjustment.index", compact("dailyProductionAdjustments"));
     }
 
     /**
@@ -21,7 +24,10 @@ class DailyProductionAdjustmentController extends Controller
      */
     public function create()
     {
-        //
+        $products = Product::all();
+        $units = Unit::all();
+
+        return view("dailyProductionAdjustment.create", compact("products", "units"));
     }
 
     /**
@@ -29,7 +35,8 @@ class DailyProductionAdjustmentController extends Controller
      */
     public function store(StoreDailyProductionAdjustmentRequest $request)
     {
-        //
+        DailyProductionAdjustment::create($request->only('quantity', 'product_id', 'unit_id', 'remark', 'type'));
+        return redirect()->back()->with('success', 'success');
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DailySales;
 use App\Http\Requests\StoreDailySalesRequest;
 use App\Http\Requests\UpdateDailySalesRequest;
+use App\Models\Product;
 
 class DailySalesController extends Controller
 {
@@ -21,7 +22,8 @@ class DailySalesController extends Controller
      */
     public function create()
     {
-        //
+        $products = Product::all();
+        return view("dailySales.create", compact('products'));
     }
 
     /**

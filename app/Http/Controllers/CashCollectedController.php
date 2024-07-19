@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use App\Models\CashCollected;
 use App\Http\Requests\StoreCashCollectedRequest;
 use App\Http\Requests\UpdateCashCollectedRequest;
@@ -13,7 +14,8 @@ class CashCollectedController extends Controller
      */
     public function index()
     {
-        //
+        $cashCollected = CashCollected::all();
+        return view("cashCollected.index", compact("cashCollected"));
     }
 
     /**
@@ -21,7 +23,8 @@ class CashCollectedController extends Controller
      */
     public function create()
     {
-        //
+        $branches = Branch::all();
+        return view("cashCollected.create", compact("branches"));
     }
 
     /**

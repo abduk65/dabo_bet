@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\InventoryAdjustment;
+use App\Models\InventoryItem;
 use App\Http\Requests\StoreInventoryAdjustmentRequest;
 use App\Http\Requests\UpdateInventoryAdjustmentRequest;
+use App\Models\Unit;
 
 class InventoryAdjustmentController extends Controller
 {
@@ -13,7 +15,8 @@ class InventoryAdjustmentController extends Controller
      */
     public function index()
     {
-        //
+        $inventoryAdjustments = InventoryAdjustment::all();
+        return view("inventoryAdjustment.index", compact("inventoryAdjustments"));
     }
 
     /**
@@ -21,7 +24,9 @@ class InventoryAdjustmentController extends Controller
      */
     public function create()
     {
-        //
+        $inventoryItems = InventoryItem::all();
+        $units = Unit::all();
+        return view("inventoryAdjustment.create", compact("inventoryItems", "units"));
     }
 
     /**
@@ -29,7 +34,8 @@ class InventoryAdjustmentController extends Controller
      */
     public function store(StoreInventoryAdjustmentRequest $request)
     {
-        //
+        InventoryAdjustment::create($request->only('quantity', 'inventory_item_id', 'unit_id', 'remark', 'operation'));
+        return redirect()->back();
     }
 
     /**
