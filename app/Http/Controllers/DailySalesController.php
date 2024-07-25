@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Commission;
 use App\Models\DailySales;
 use App\Http\Requests\StoreDailySalesRequest;
 use App\Http\Requests\UpdateDailySalesRequest;
@@ -23,7 +24,8 @@ class DailySalesController extends Controller
     public function create()
     {
         $products = Product::all();
-        return view("dailySales.create", compact('products'));
+        $commissions = Commission::all();
+        return view("dailySales.create", compact('products', 'commissions'));
     }
 
     /**

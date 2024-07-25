@@ -20,7 +20,8 @@ use App\Http\Controllers\StandardBatchVarietyController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\WorkOrderController;
 
-;
+Auth::routes();
+
 
 Route::get('/', function () {
     // $user = Auth::user();
@@ -84,3 +85,6 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('commission', CommissionController::class);
 
 });
+
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
