@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class CommissionRecipient extends Model
 {
@@ -26,5 +28,10 @@ class CommissionRecipient extends Model
         return $this->belongsToMany(Product::class, 'commissions')
             ->withPivot('discount_amount', 'status')
             ->withTimestamps();
+    }
+
+    public function dailyCommission(): HasMany
+    {
+        return $this->hasMany(DailyCommission::class);
     }
 }

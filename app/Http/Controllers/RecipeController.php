@@ -9,15 +9,20 @@ use App\Models\Unit;
 use App\Http\Requests\StoreRecipeRequest;
 use App\Http\Requests\UpdateRecipeRequest;
 use App\Models\RecipeInventoryItem;
+use Illuminate\Http\Request;
 
 class RecipeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $recipes = Recipe::all();
+        $recipes = Recipe::with('inventoryItems', 'product', 'standardBatchVariety', 'unit')->get();
+        if($request->wantsJson())
+        {
+            return response()->json($recipes);
+        }
         return view("recipe.index", compact("recipes"));
     }
 

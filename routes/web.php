@@ -28,7 +28,7 @@ Route::get('/', function () {
     // $userPermission = $user->hasPermission('update', InventoryItem::class);
     // echo $userPermission;
     return view('welcome');
-});
+})->name('front');
 
 Route::get(
     '/user_role',
@@ -41,7 +41,7 @@ Route::get(
     '/logout',
     function () {
         Auth::logout();
-        return redirect(route('/'));
+        return redirect(route('front'));
     }
 );
 

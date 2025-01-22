@@ -22,7 +22,23 @@ class UpdateBranchRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => ['required', 'string', 'max:255'],
+            'type' => ['required', 'string', 'in:main,sub'],
+        ];
+    }
+
+    /**
+     * Get custom messages for validator errors.
+     *
+     * @return array
+     */
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'The branch name is required',
+            'name.max' => 'The branch name cannot exceed 255 characters',
+            'type.required' => 'The branch type is required',
+            'type.in' => 'The branch type must be either main or sub',
         ];
     }
 }

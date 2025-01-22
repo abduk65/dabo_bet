@@ -7,15 +7,20 @@ use App\Models\Expense;
 use App\Http\Requests\StoreExpenseRequest;
 use App\Http\Requests\UpdateExpenseRequest;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class ExpenseController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $expenses = Expense::all();
+        $expenses = Expense::with('user', 'branch')->get();
+        if($request->wantsJson())
+        {
+            return response()->json($expenses);
+        }
         return view("expense.index", compact("expenses"));
     }
 
@@ -34,7 +39,10 @@ class ExpenseController extends Controller
      */
     public function store(StoreExpenseRequest $request)
     {
-        Expense::create($request->only('amount', 'user_id', 'description', 'branch_id'));
+        $expense = Expense::create($request->only('amount', 'user_id', 'description', 'branch_id', 'type'));
+        if($request->wantsJson()){
+            return response()->json($expense);
+        }
         return redirect()->back()->with('success', 'succeeded');
     }
 

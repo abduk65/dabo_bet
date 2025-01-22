@@ -5,15 +5,23 @@ namespace App\Http\Controllers;
 use App\Models\Commission;
 use App\Http\Requests\StoreCommissionRequest;
 use App\Http\Requests\UpdateCommissionRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CommissionController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $commissions = Commission::with('commissionRecipient', 'product')->get();
+        if($request->wantsJson()){
+            return response()->json(
+                $commissions
+            );
+        }
+        return view('commissions.index', compact('commissions'));
     }
 
     /**
@@ -29,7 +37,11 @@ class CommissionController extends Controller
      */
     public function store(StoreCommissionRequest $request)
     {
-        //
+        $commission = Commission::create($request->all());
+        if($request->wantsJson()){
+            return response()->json($commission);
+        }
+        return redirect()->route('commissions.index');
     }
 
     /**

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input id="input" type="text" />
+    <div id="output">Hello World</div>
+
+    <script>
+        function reactive(obj) {
+            return new Proxy(obj, {
+                get(target, property) {
+                    let value = target[property]
+                    if (typeof value === 'object' && value !== null) {
+                        return reactive(value)
+                    }
+                    return value
+                }
+
+                , set(target, property, value) {
+                    console.log(`Setting property ${property} to ${value}`)
+                    target[property] = value
+                    return true
+                }
+            })
+        }
+
+        let state = reactive({
+            user:{
+                name: "Daniel",
+                age: 13
+            }
+        })
+    </script>
+</body>
+
+</html>

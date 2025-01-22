@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class DailySales extends Model
 {
@@ -26,5 +27,10 @@ class DailySales extends Model
     public function commission(): BelongsTo
     {
         return $this->belongsTo(Commission::class);
+    }
+
+    public function dailyCommission(): HasMany
+    {
+        return $this->HasMany(DailyCommission::class);
     }
 }

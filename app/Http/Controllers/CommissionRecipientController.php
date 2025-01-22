@@ -7,14 +7,19 @@ use App\Models\CommissionRecipient;
 use App\Http\Requests\StoreCommissionRecipientRequest;
 use App\Http\Requests\UpdateCommissionRecipientRequest;
 
+use Illuminate\Http\Request;
+
 class CommissionRecipientController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $commissionRecipients = CommissionRecipient::all();
+        $commissionRecipients = CommissionRecipient::with('branch')->get();
+        if ($request->wantsJson()) {
+            return response()->json($commissionRecipients);
+        }
         return view("commissionRecipient.index", compact("commissionRecipients"));
     }
 
@@ -38,7 +43,9 @@ class CommissionRecipientController extends Controller
                 'branch_id'
             )
         );
-
+        if($request->wantsJson()){
+            return response()->json(["success" => true, "commissionRecipient" => CommissionRecipient::all()]);
+        }
         return redirect()->back()->with('success', 'success');
     }
 

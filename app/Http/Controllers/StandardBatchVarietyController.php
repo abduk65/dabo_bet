@@ -6,15 +6,19 @@ use App\Models\Recipe;
 use App\Models\StandardBatchVariety;
 use App\Http\Requests\StoreStandardBatchVarietyRequest;
 use App\Http\Requests\UpdateStandardBatchVarietyRequest;
+use Illuminate\Http\Request;
 
 class StandardBatchVarietyController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $standardBatchVariety = StandardBatchVariety::all();
+        $standardBatchVariety = StandardBatchVariety::with('recipe', 'recipe.product')->get();
+        if ($request->wantsJson()) {
+            return response()->json($standardBatchVariety);
+        }
         return view("standardBatchVariety.index", compact("standardBatchVariety"));
     }
 
@@ -34,6 +38,9 @@ class StandardBatchVarietyController extends Controller
     {
         $validated = $request->only('name', 'recipe_id', 'single_factor_expected_output');
         StandardBatchVariety::create($validated);
+        if($request->wantsJson()){
+            return response()->json($validated);
+        }
         return redirect()->back()->with("success", "message");
     }
 

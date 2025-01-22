@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+
 use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
@@ -12,9 +14,12 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $products = Product::all();
+        if ($request->wantsJson()) {
+            return response()->json($products);
+        }
         return view("product.index", compact("products"));
     }
 
@@ -31,7 +36,7 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        Product::create($request->only('name', 'unit_price'));
+        Product::create($request->only('name', 'unit_price', 'type'));
         return redirect()->back()->with("success", "Created Successfully");
     }
 

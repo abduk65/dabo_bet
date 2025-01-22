@@ -8,7 +8,6 @@ use App\Models\Unit;
 use App\Models\Product;
 
 return [
-
     'worker' => [
         'read' => [
             InventoryItem::class,

@@ -6,15 +6,19 @@ use App\Models\Branch;
 use App\Models\CashCollected;
 use App\Http\Requests\StoreCashCollectedRequest;
 use App\Http\Requests\UpdateCashCollectedRequest;
+use Illuminate\Http\Request;
 
 class CashCollectedController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $cashCollected = CashCollected::all();
+        $cashCollected = CashCollected::with('branch')->get();
+        if ($request->wantsJson()) {
+            return response()->json($cashCollected);
+        }
         return view("cashCollected.index", compact("cashCollected"));
     }
 

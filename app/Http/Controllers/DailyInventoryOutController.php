@@ -8,15 +8,19 @@ use App\Http\Requests\UpdateDailyInventoryOutRequest;
 use App\Models\InventoryItem;
 use App\Models\Unit;
 use App\Models\User;
+use Illuminate\Http\Request;
 
 class DailyInventoryOutController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $daily =  DailyInventoryOut::all();
+        $daily =  DailyInventoryOut::with('inventoryItem', 'inventoryItem.brand', 'unit', 'user', 'receiver_user')->get();
+        if($request->wantsJson()){
+            return response()->json($daily);
+        }
         return view('dailyInventoryOut.index', compact('daily'));
     }
 
@@ -41,9 +45,14 @@ class DailyInventoryOutController extends Controller
         $daily->inventory_item_id = $request->inventory_item;
         $daily->quantity = $request->quantity;
         $daily->unit_id = $request->unit;
-        $daily->user_id = auth()->user()->id;
-        $daily->receiver_user_id = $request->receiver_user;
+        $daily->user_id = auth()->user()->id || 0;
+//        TODO FIX THIS REMOVE THE USER ID HARDCODE MEDEREGUN
+        $daily->receiver_user_id = $request->receiver_user_id;
         $daily->save();
+        if($request->wantsJson())
+        {
+            return response()->json($daily);
+        }
 
         // Redirect back with a success message
         return redirect()->back()->with('success', 'Inventory input added successfully.');

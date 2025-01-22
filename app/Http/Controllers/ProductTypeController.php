@@ -5,15 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\ProductType;
 use App\Http\Requests\StoreProductTypeRequest;
 use App\Http\Requests\UpdateProductTypeRequest;
+use Illuminate\Http\Request;
 
 class ProductTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         $productTypes = ProductType::all();
+        if($request->wantsJson()){
+            return response()->json($productTypes);
+        }
         return view(
             'productType.index',
             ['productTypes' => $productTypes]
@@ -35,6 +39,9 @@ class ProductTypeController extends Controller
     {
         $productType = new ProductType;
         $productType->create($request->only('name'));
+        if($request->wantsJson()){
+            return response()->json($productType);
+        }
         return redirect()->back();
     }
 

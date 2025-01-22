@@ -7,15 +7,19 @@ use App\Models\Product;
 use App\Models\Unit;
 use App\Http\Requests\StoreDailyProductionAdjustmentRequest;
 use App\Http\Requests\UpdateDailyProductionAdjustmentRequest;
+use Illuminate\Http\Request;
 
 class DailyProductionAdjustmentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $dailyProductionAdjustments = DailyProductionAdjustment::all();
+        $dailyProductionAdjustments = DailyProductionAdjustment::with('product', 'unit')->get();
+        if($request->wantsJson()){
+            return response()->json($dailyProductionAdjustments);
+        }
         return view("dailyProductionAdjustment.index", compact("dailyProductionAdjustments"));
     }
 

@@ -6,15 +6,20 @@ use App\Models\WorkOrder;
 use App\Models\StandardBatchVariety;
 use App\Http\Requests\StoreWorkOrderRequest;
 use App\Http\Requests\UpdateWorkOrderRequest;
+use Illuminate\Http\Request;
 
 class WorkOrderController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $workOrders = WorkOrder::all();
+        $workOrders = WorkOrder::with('standardBatchVariety', 'standardBatchVariety.recipe', 'standardBatchVariety.recipe.product')->get();
+        if($request->wantsJson()){
+            return response()->json($workOrders);
+        }
+
         return view("workOrder.index", compact("workOrders"));
     }
 

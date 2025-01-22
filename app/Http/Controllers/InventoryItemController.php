@@ -7,6 +7,7 @@ use App\Http\Requests\StoreInventoryItemRequest;
 use App\Http\Requests\UpdateInventoryItemRequest;
 use App\Models\Brand;
 use App\Models\Unit;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -17,10 +18,14 @@ class InventoryItemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        Gate::authorize('viewAny', InventoryItem::class);
-        $inventoryItems = InventoryItem::all(); // Assuming you want to retrieve all items
+//        Gate::authorize('viewAny', InventoryItem::class);
+        $inventoryItems = InventoryItem::with('unit', 'brand', 'user')->get(); // Assuming you want to retrieve all items
+
+        if($request->wantsJson()){
+            return response()->json($inventoryItems);
+        }
 
         // Pass the inventory items to the view
         return view('inventory.index', ['inventoryItems' => $inventoryItems]);
@@ -44,10 +49,10 @@ class InventoryItemController extends Controller
      */
     public function store(StoreInventoryItemRequest $request)
     {
-        Gate::authorize('create', InventoryItem::class);
+//        Gate::authorize('create', InventoryItem::class);
 
         $previousLastBatch = 1;
-        $pre = InventoryItem::where('brand_id', $request->brand)->orderBy('batch_number', 'asc')->pluck('batch_number');
+        $pre = InventoryItem::where('brand_id', $request->brand_id)->orderBy('batch_number', 'asc')->pluck('batch_number');
 
         $previousLastBatch = $pre->last();
         // dd($previousInventoryBrand);
@@ -55,15 +60,18 @@ class InventoryItemController extends Controller
         // Store the inventory input in the database
         $inventoryInput = new InventoryItem();
         $inventoryInput->item_name = $request->item_name;
-        $inventoryInput->unit_id =  $request->unit;
-        $inventoryInput->brand_id =  $request->brand;
+        $inventoryInput->unit_id =  $request->unit_id;
+        $inventoryInput->brand_id =  $request->brand_id;
         $inventoryInput->quantity = $request->quantity;
-        $inventoryInput->user_id = auth()->id();
+        $inventoryInput->user_id = auth()->id() || 1;
+        //TODO REMOVE THE PREVIOUS LINE FOR PRODUCTION
         $inventoryInput->batch_number = $previousLastBatch;
         $inventoryInput->price = $request->price;
         $inventoryInput->total_price = $request->price * $request->quantity;
         $inventoryInput->save();
-
+        if($request->wantsJson()){
+            return response()->json($inventoryInput);
+        }
         // Redirect back with a success message
         return redirect()->back()->with('success', 'Inventory input added successfully.');
     }
