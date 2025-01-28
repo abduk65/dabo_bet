@@ -82,7 +82,7 @@ class BrandController extends Controller
             // Map the product_type to product_type_id
             $updateData = [
                 'name' => $request->name,
-                'product_type_id' => $request->product_type
+                'product_type_id' => $request->product_type_id
             ];
 
             $brand->fill($updateData);
@@ -95,7 +95,7 @@ class BrandController extends Controller
                 return response()->json([
                     'message' => 'Brand updated successfully',
                     'data' => $updatedBrand
-                ], 200);
+                ], 200)->setStatusCode(200);
             }
 
             return redirect()->back()->with('success', 'Brand updated successfully');

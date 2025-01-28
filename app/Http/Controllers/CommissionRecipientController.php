@@ -43,7 +43,7 @@ class CommissionRecipientController extends Controller
                 'branch_id'
             )
         );
-        if($request->wantsJson()){
+        if ($request->wantsJson()) {
             return response()->json(["success" => true, "commissionRecipient" => CommissionRecipient::all()]);
         }
         return redirect()->back()->with('success', 'success');
@@ -70,7 +70,21 @@ class CommissionRecipientController extends Controller
      */
     public function update(UpdateCommissionRecipientRequest $request, CommissionRecipient $commissionRecipient)
     {
-        //
+        $commissionRecipient->update(
+            $request->only([
+                'name',
+                'branch_id'
+            ])
+        );
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                "success" => true,
+                "commissionRecipient" => $commissionRecipient->fresh()
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Commission recipient updated successfully');
     }
 
     /**
@@ -78,6 +92,15 @@ class CommissionRecipientController extends Controller
      */
     public function destroy(CommissionRecipient $commissionRecipient)
     {
-        //
+        $commissionRecipient->delete();
+
+        if (request()->wantsJson()) {
+            return response()->json([
+                "success" => true,
+                "message" => "Commission recipient deleted successfully"
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Commission recipient deleted successfully');
     }
 }

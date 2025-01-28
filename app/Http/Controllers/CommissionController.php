@@ -16,7 +16,7 @@ class CommissionController extends Controller
     public function index(Request $request)
     {
         $commissions = Commission::with('commissionRecipient', 'product')->get();
-        if($request->wantsJson()){
+        if ($request->wantsJson()) {
             return response()->json(
                 $commissions
             );
@@ -38,7 +38,7 @@ class CommissionController extends Controller
     public function store(StoreCommissionRequest $request)
     {
         $commission = Commission::create($request->all());
-        if($request->wantsJson()){
+        if ($request->wantsJson()) {
             return response()->json($commission);
         }
         return redirect()->route('commissions.index');
@@ -65,7 +65,22 @@ class CommissionController extends Controller
      */
     public function update(UpdateCommissionRequest $request, Commission $commission)
     {
-        //
+        $commission->update(
+            $request->only([
+                'commission_recipient_id',
+                'product_id',
+                'discount_amount'
+            ])
+        );
+
+        if ($request->wantsJson()) {
+            return response()->json([
+                "success" => true,
+                "commission" => $commission->fresh()
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Commission updated successfully');
     }
 
     /**
@@ -73,6 +88,15 @@ class CommissionController extends Controller
      */
     public function destroy(Commission $commission)
     {
-        //
+        $commission->delete();
+
+        if (request()->wantsJson()) {
+            return response()->json([
+                "success" => true,
+                "message" => "Commission deleted successfully"
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Commission deleted successfully');
     }
 }
