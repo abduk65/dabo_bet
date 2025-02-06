@@ -34,47 +34,47 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        User::factory(10)->create();
 
-        // User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'admin@example.com',
-        //     'email_verified_at' => now(),
-        //     'password' => Hash::make('password'),
-        //     'two_factor_secret' => null,
-        //     'two_factor_recovery_codes' => null,
-        //     'remember_token' => Str::random(10),
-        //     'profile_photo_path' => null,
-        //     'role' => 'admin',
+        User::factory()->create([
+            'name' => 'Test User',
+            'email' => 'admin@example.com',
+            'email_verified_at' => now(),
+            'password' => Hash::make('password'),
+            'two_factor_secret' => null,
+            'two_factor_recovery_codes' => null,
+            'remember_token' => Str::random(10),
+            'profile_photo_path' => null,
+            'role' => 'admin',
 
-        // ]);
+        ]);
 
-        // $this->call(UnitSeeder::class);
-        // $this->call(ProductTypeSeeder::class);
-        // $this->call(BrandSeeder::class);
-        // $this->call(ProductSeeder::class);
+        $this->call(UnitSeeder::class);
+        $this->call(ProductTypeSeeder::class);
+        $this->call(BrandSeeder::class);
+        $this->call(ProductSeeder::class);
 
-        // $this->call(BranchSeeder::class);
+        $this->call(BranchSeeder::class);
 
-        // $this->call(CommissionRecipientSeeder::class);
+        $this->call(CommissionRecipientSeeder::class);
 
-        // Brand::factory()->count(10)->create();
-        // InventoryItem::factory()->count(40)->create();
-        // DailyInventoryOut::factory()->count(50)->create();
-        // Recipe::factory()->count(10)->create();
-        // RecipeInventoryItem::factory()->count(50)->create();
-        // for ($i = 0; $i < 10; $i++) {
-        //     $this->call(StandardBatchVarietySeeder::class);
-        // }
+        Brand::factory()->count(10)->create();
+        InventoryItem::factory()->count(40)->create();
+        DailyInventoryOut::factory()->count(50)->create();
+        Recipe::factory()->count(10)->create();
+        RecipeInventoryItem::factory()->count(50)->create();
+        for ($i = 0; $i < 10; $i++) {
+            $this->call(StandardBatchVarietySeeder::class);
+        }
 
-        // WorkOrder::factory()->count(50)->create();
+        WorkOrder::factory()->count(50)->create();
 
         DailyProductionAdjustment::factory()->count(10)->create();
         InventoryAdjustment::factory()->count(25)->create();
-        // Expense::factory(50)->create();
-        // CashCollected::factory(150)->create();
+        Expense::factory(50)->create();
+        CashCollected::factory(150)->create();
 
-        // Commission::factory(20)->create();
-        // DailySales::factory(150)->create();
+        Commission::factory(20)->create();
+        DailySales::factory(150)->create();
     }
 }
