@@ -7,15 +7,20 @@ use App\Models\InventoryItem;
 use App\Http\Requests\StoreInventoryAdjustmentRequest;
 use App\Http\Requests\UpdateInventoryAdjustmentRequest;
 use App\Models\Unit;
+use Illuminate\Http\Request;
 
 class InventoryAdjustmentController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $inventoryAdjustments = InventoryAdjustment::all();
+        $inventoryAdjustments = InventoryAdjustment::with('inventoryItem', 'unit')->get();
+        $wants = $request->wantsJson();
+        if ($request->wantsJson()) {
+            return response()->json($inventoryAdjustments);
+        }
         return view("inventoryAdjustment.index", compact("inventoryAdjustments"));
     }
 
