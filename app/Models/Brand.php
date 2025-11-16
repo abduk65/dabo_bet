@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Brand extends Model
@@ -12,17 +11,24 @@ class Brand extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name',
-        'product_type_id'
+        'brand_name',
+        'country_of_origin',
+        'is_active',
     ];
 
-    public function productType(): BelongsTo
-    {
-        return $this->belongsTo(ProductType::class);
-    }
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
 
-    public function inventoryItem()
+    // Relationships
+    public function inventoryItems(): HasMany
     {
         return $this->hasMany(InventoryItem::class);
+    }
+
+    // Scopes
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
     }
 }

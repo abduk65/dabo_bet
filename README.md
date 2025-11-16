@@ -1,66 +1,151 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Bakery ERP System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Complete end-to-end management system for Ethiopian bakery operations with multiple retail branches and central production facility.
 
-## About Laravel
+## Project Status: Phase 1 - Foundation Complete
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### Implemented Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+#### Foundation Layer
+- **Users**: Multi-role authentication (Owner, Manager, Supervisor, Employee)
+- **Branches**: Main production + retail branches
+- **Units**: Measurement system (weight, volume, count)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+#### Phase 1: Inventory Management
+- **Material Types**: Categorized raw materials (flour, sugar, oil, etc.) with Amharic translation support
+- **Brands**: Brand management for multi-brand inventory
+- **Inventory Items**: Brand-specific SKU system with auto-generation
+- **Purchase Prices**: Temporal pricing with effective date ranges
+- **Purchase Orders**: Full procurement workflow (draft → submitted → received)
+- **Inventory Transactions**: Complete audit trail of all stock movements
+- **Inventory Adjustments**: Error correction system with approval workflow
 
-## Learning Laravel
+### Database Schema
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+**Foundation Tables:**
+- `units` - Measurement units
+- `branches` - Organizational structure
+- `users` - Authentication and roles
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+**Inventory Tables:**
+- `material_types` - Generic material categories
+- `brands` - Manufacturer brands
+- `inventory_items` - Specific brand+material combinations
+- `purchase_prices` - Historical price tracking
+- `purchase_orders` + `purchase_order_items` - Procurement
+- `inventory_transactions` - Stock movement ledger
+- `inventory_adjustments` - Stock corrections
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Key Design Decisions
 
-## Laravel Sponsors
+1. **Brand-Specific Recipes**: Recipes reference exact brand+material combinations (not generic materials) to support:
+   - Multi-brand flour blending (e.g., 60% Brand A + 40% Brand B)
+   - Accurate cost tracking per brand
+   - Quality traceability
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+2. **Temporal Pricing**: All prices have effective_date/expiry_date to handle Ethiopian price volatility
 
-### Premium Partners
+3. **Auto-Generated SKUs**: Format `{MATERIAL_TYPE}-{BRAND}-{SEQ}` (e.g., `FLOUR-AP-MAMA-001`)
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+4. **Approval Workflows**: Status enums (draft/submitted/approved) prevent premature data propagation
 
-## Contributing
+### API Endpoints
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**Authentication:**
+- POST `/api/login`
+- POST `/api/logout`
+- GET `/api/user`
 
-## Code of Conduct
+**Inventory:**
+- GET/POST `/api/inventory/material-types`
+- GET/POST `/api/inventory/brands`
+- GET/POST `/api/inventory/items`
+- GET `/api/inventory/items/{id}/price-history`
+- GET/POST `/api/inventory/purchase-orders`
+- POST `/api/inventory/purchase-orders/{id}/submit`
+- POST `/api/inventory/purchase-orders/{id}/receive`
+- GET/POST `/api/inventory/adjustments`
+- POST `/api/inventory/adjustments/{id}/approve`
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+**Reference Data:**
+- GET `/api/units`
+- GET `/api/branches`
 
-## Security Vulnerabilities
+### Model Relationships
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+**InventoryItem** (core entity):
+- belongs to: MaterialType, Brand, Unit
+- has many: PurchasePrices, InventoryTransactions, PurchaseOrderItems
 
-## License
+**PurchaseOrder**:
+- has many: PurchaseOrderItems
+- belongs to: User (creator, approver, receiver)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**User**:
+- belongs to: Branch
+- has many: created entities (scoped by role)
+
+### Next Steps: Phase 2 - Production
+
+**Upcoming Tables:**
+- `products` - Finished goods
+- `recipes` + `recipe_components` - Production formulas
+- `production_orders` - Work orders
+- `production_material_consumption` - Material usage tracking
+- `production_output` - Finished goods yield
+- `recipe_substitutions` - Brand swap tracking
+
+### Development Setup
+
+1. Install dependencies:
+   ```bash
+   composer install
+   ```
+
+2. Configure environment:
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
+
+3. Run migrations and seeders:
+   ```bash
+   php artisan migrate:fresh --seed
+   ```
+
+4. Default credentials:
+   - Owner: owner@bakery.com / password
+   - Manager: manager@bakery.com / password
+   - Supervisor: supervisor@bakery.com / password
+   - Employee: employee@bakery.com / password
+
+### Technology Stack
+
+- **Backend**: Laravel 10.x (API-only, no Blade)
+- **Authentication**: Laravel Sanctum
+- **Database**: MySQL
+- **Frontend**: Vue 3 (separate implementation)
+
+### Architecture Principles
+
+1. **API-First**: Pure JSON API, no server-side rendering
+2. **Phased Development**: Inventory → Production → Sales → Financials
+3. **Audit Everything**: All changes logged via Laravel events
+4. **Role-Based Access**: Granular permissions per user role
+5. **Temporal Data**: Historical accuracy for volatile pricing
+
+### Business Context
+
+**Ethiopian Bakery Operations:**
+- Central production facility (main branch)
+- Multiple retail locations (sub branches)
+- Price volatility requires historical tracking
+- Low-literacy workforce needs simple, validated interfaces
+- Commission recipients = bulk buyers with negotiated pricing
+- Daily reconciliation critical for cash control
+
+**Success Metrics:**
+- Daily sales reconciliation: 40min → 20min (target 50% reduction)
+- Cash variance: <3% threshold
+- Production cost accuracy: ±5 ETB per batch
+- Real-time bank balance visibility for owner

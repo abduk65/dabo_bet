@@ -9,25 +9,31 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Unit extends Model
 {
     use HasFactory;
-    protected $guarded = [];
 
-    public function dailyInventoryOut()
+    protected $fillable = [
+        'unit_name',
+        'unit_abbreviation',
+        'unit_type',
+    ];
+
+    // Relationships
+    public function materialTypes(): HasMany
     {
-        return $this->hasMany(DailyInventoryOut::class);
+        return $this->hasMany(MaterialType::class, 'base_unit_id');
     }
 
-    public function inventoryItem()
+    public function inventoryItems(): HasMany
     {
-        return $this->hasMany(DailyInventoryOut::class);
+        return $this->hasMany(InventoryItem::class, 'unit_of_measure_id');
     }
 
-    public function dailyProductionAdjustment(): HasMany
+    public function purchasePrices(): HasMany
     {
-        return $this->hasMany(Unit::class);
+        return $this->hasMany(PurchasePrice::class);
     }
 
-    public function inventoryAdjustment(): HasMany
+    public function inventoryTransactions(): HasMany
     {
-        return $this->hasMany(InventoryAdjustment::class);
+        return $this->hasMany(InventoryTransaction::class);
     }
 }

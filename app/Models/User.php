@@ -2,93 +2,91 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Fortify\TwoFactorAuthenticatable;
-use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
-    use HasApiTokens;
-    use HasFactory;
-    use HasProfilePhoto;
-    use Notifiable;
-    use TwoFactorAuthenticatable;
+    use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
+        'role',
+        'branch_id',
+        'is_active',
+        'profile_photo_path',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
-        'two_factor_recovery_codes',
         'two_factor_secret',
+        'two_factor_recovery_codes',
     ];
 
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array<int, string>
-     */
-    protected $appends = [
-        'profile_photo_url',
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'two_factor_confirmed_at' => 'datetime',
+        'is_active' => 'boolean',
+        'password' => 'hashed',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    // Relationships
+    public function branch(): BelongsTo
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->belongsTo(Branch::class);
     }
 
-    public function hasRole($role)
+    public function createdPurchasePrices(): HasMany
     {
-        return $this->role = $role;
+        return $this->hasMany(PurchasePrice::class, 'created_by_user_id');
     }
 
-    public function hasPermission($action, $model)
+    public function createdPurchaseOrders(): HasMany
     {
-        $role = $this->role;
-        $roles = config('roles');
-
-        return (isset($roles[$role][$action]) && in_array($model, $roles[$role][$action])) || $this->role == 'admin';
+        return $this->hasMany(PurchaseOrder::class, 'created_by_user_id');
     }
 
-    public function inventoryItem(): HasMany
+    public function approvedPurchaseOrders(): HasMany
     {
-        return $this->hasMany(InventoryItem::class);
+        return $this->hasMany(PurchaseOrder::class, 'approved_by_user_id');
     }
 
-    public function dailyInventoyOut(): HasMany
+    public function inventoryTransactions(): HasMany
     {
-        return $this->hasMany(DailyInventoryOut::class);
+        return $this->hasMany(InventoryTransaction::class, 'created_by_user_id');
     }
 
-    public function expense(): HasMany
+    // Role checks
+    public function isOwner(): bool
     {
-        return $this->hasMany(Expense::class);
+        return $this->role === 'owner';
+    }
+
+    public function isManager(): bool
+    {
+        return in_array($this->role, ['owner', 'manager']);
+    }
+
+    public function isSupervisor(): bool
+    {
+        return in_array($this->role, ['owner', 'manager', 'supervisor']);
+    }
+
+    // Scopes
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    public function scopeRole($query, string $role)
+    {
+        return $query->where('role', $role);
     }
 }

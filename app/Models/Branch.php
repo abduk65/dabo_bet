@@ -10,26 +10,44 @@ class Branch extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'type',
+        'address',
+        'phone',
+        'is_active',
+    ];
 
-    public function cashCollected(): HasMany
+    protected $casts = [
+        'is_active' => 'boolean',
+    ];
+
+    // Relationships
+    public function users(): HasMany
     {
-        return $this->hasMany(CashCollected::class);
+        return $this->hasMany(User::class);
     }
 
-    public function expense(): HasMany
+    public function inventoryTransactions(): HasMany
     {
-        return $this->hasMany(Expense::class);
+        return $this->hasMany(InventoryTransaction::class);
     }
 
-    public function commissionRecipients(): HasMany
+    // Scope for main branch
+    public function scopeMain($query)
     {
-        return $this->hasMany(CommissionRecipient::class);
+        return $query->where('type', 'main');
     }
 
-    public function dailySales(): HasMany
+    // Scope for sub branches
+    public function scopeSub($query)
     {
-        return $this->hasMany(DailySales::class);
+        return $query->where('type', 'sub');
     }
 
+    // Scope for active branches
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
 }
