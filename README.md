@@ -2,7 +2,7 @@
 
 Complete end-to-end management system for Ethiopian bakery operations with multiple retail branches and central production facility.
 
-## Project Status: Phase 1 - Foundation Complete
+## Project Status: Phases 1-4 Complete (Foundation → Financials)
 
 ### Implemented Features
 
@@ -11,7 +11,7 @@ Complete end-to-end management system for Ethiopian bakery operations with multi
 - **Branches**: Main production + retail branches
 - **Units**: Measurement system (weight, volume, count)
 
-#### Phase 1: Inventory Management
+#### Phase 1: Inventory Management ✓
 - **Material Types**: Categorized raw materials (flour, sugar, oil, etc.) with Amharic translation support
 - **Brands**: Brand management for multi-brand inventory
 - **Inventory Items**: Brand-specific SKU system with auto-generation
@@ -20,14 +20,44 @@ Complete end-to-end management system for Ethiopian bakery operations with multi
 - **Inventory Transactions**: Complete audit trail of all stock movements
 - **Inventory Adjustments**: Error correction system with approval workflow
 
-### Database Schema
+#### Phase 2: Production Management ✓
+- **Products**: Finished goods with type classification (Bread, Cake, Others)
+- **Product Prices**: Temporal pricing for finished goods
+- **Recipes**: Production formulas with auto-generated codes (RCP-PRODUCTNAME-001)
+- **Recipe Components**: Brand-specific ingredient lists
+- **Standard Batch Varieties**: Batch scaling configuration
+- **Production Orders**: Work orders with auto-generated numbers (WO-YYYYMMDD-001)
+- **Production Material Consumption**: Material usage tracking with variance detection
+- **Production Output**: Quality control tracking (good/rejected quantities)
+- **Recipe Substitutions**: Brand substitution audit trail
+- **Daily Production Adjustments**: Waste tracking (stale/damaged/worker error)
+- **Finished Goods Inventory**: Product movement ledger
 
-**Foundation Tables:**
+#### Phase 3: Sales & Distribution ✓
+- **Customers**: Walk-in, commission recipients, and branch customers
+- **Customer Pricing**: Contract pricing for commission recipients (temporal pattern)
+- **Dispatches**: Branch-to-branch transfers with damage tracking
+- **Dispatch Items**: Line-level cost snapshots and variance detection
+- **Sales**: Cash and credit sales with auto-generated numbers (SALE-BRANCHID-YYYYMMDD-001)
+- **Sale Items**: Line-level profit calculation
+- **Payments**: Payment tracking with advance payment support
+
+#### Phase 4: Financial Management ✓
+- **Chart of Accounts**: Hierarchical account structure (27 system accounts)
+- **Journal Entries**: Double-entry bookkeeping with auto-generated numbers (JE-YYYYMMDD-001)
+- **Journal Entry Lines**: Debit/credit lines with balance validation
+- **Account Balances**: Current and historical balance calculations
+- **Entry Posting**: Draft → Posted → Reversed workflow
+- **Financial Reports**: Balance sheet and P&L foundations
+
+### Database Schema (42 Tables)
+
+**Foundation Tables (3):**
 - `units` - Measurement units
 - `branches` - Organizational structure
 - `users` - Authentication and roles
 
-**Inventory Tables:**
+**Phase 1: Inventory Tables (8):**
 - `material_types` - Generic material categories
 - `brands` - Manufacturer brands
 - `inventory_items` - Specific brand+material combinations
@@ -35,6 +65,33 @@ Complete end-to-end management system for Ethiopian bakery operations with multi
 - `purchase_orders` + `purchase_order_items` - Procurement
 - `inventory_transactions` - Stock movement ledger
 - `inventory_adjustments` - Stock corrections
+
+**Phase 2: Production Tables (11):**
+- `products` - Finished goods catalog
+- `product_prices` - Product pricing history
+- `recipes` - Production formulas
+- `recipe_components` - Brand-specific ingredient lists
+- `standard_batch_varieties` - Batch size configurations
+- `production_orders` - Work orders
+- `production_material_consumption` - Material usage with variance
+- `production_output` - Finished goods yield
+- `recipe_substitutions` - Brand swap tracking
+- `daily_production_adjustments` - Production waste
+- `finished_goods_inventory` - Product movement ledger
+
+**Phase 3: Sales & Distribution Tables (7):**
+- `customers` - Customer master (walk-in, commission recipients, branches)
+- `customer_pricing` - Contract pricing
+- `dispatches` - Branch transfers
+- `dispatch_items` - Dispatch line items
+- `sales` - Sales transactions
+- `sale_items` - Sale line items with profit calculation
+- `payments` - Payment tracking
+
+**Phase 4: Financial Tables (3):**
+- `accounts` - Chart of accounts
+- `journal_entries` - Financial transaction headers
+- `journal_entry_lines` - Double-entry lines
 
 ### Key Design Decisions
 
@@ -44,19 +101,42 @@ Complete end-to-end management system for Ethiopian bakery operations with multi
    - Quality traceability
 
 2. **Temporal Pricing**: All prices have effective_date/expiry_date to handle Ethiopian price volatility
+   - Applies to: purchase_prices, product_prices, customer_pricing
+   - NULL expiry_date = current pricing
 
-3. **Auto-Generated SKUs**: Format `{MATERIAL_TYPE}-{BRAND}-{SEQ}` (e.g., `FLOUR-AP-MAMA-001`)
+3. **Cost Snapshot Pattern**: Unit costs are locked at transaction time
+   - `dispatch_items.unit_cost` - COGS at dispatch time
+   - `sale_items.unit_cost` - COGS at sale time
+   - `production_material_consumption.unit_cost` - Price at production time
+   - **Critical**: Prevents retroactive P&L changes when new batches are produced
 
-4. **Approval Workflows**: Status enums (draft/submitted/approved) prevent premature data propagation
+4. **Auto-Generated Codes**: Consistent format across all entities
+   - SKUs: `FLOUR-AP-MAMA-001`
+   - Recipes: `RCP-PRODUCTNAME-001`
+   - Work Orders: `WO-YYYYMMDD-001`
+   - Sales: `SALE-BRANCHID-YYYYMMDD-001`
+   - Journal Entries: `JE-YYYYMMDD-001`
 
-### API Endpoints
+5. **Approval Workflows**: Status enums (draft/submitted/approved) prevent premature data propagation
+
+6. **Double-Entry Bookkeeping**: All financial transactions create balanced journal entries
+   - Debits must equal credits
+   - Polymorphic references to source transactions
+   - Posting and reversal support
+
+7. **Variance Detection**: Actual vs. planned tracking
+   - Production material consumption variance
+   - Dispatch damage/loss tracking
+   - Quality control rejection tracking
+
+### API Endpoints (Planned)
 
 **Authentication:**
 - POST `/api/login`
 - POST `/api/logout`
 - GET `/api/user`
 
-**Inventory:**
+**Phase 1: Inventory:**
 - GET/POST `/api/inventory/material-types`
 - GET/POST `/api/inventory/brands`
 - GET/POST `/api/inventory/items`
@@ -67,33 +147,85 @@ Complete end-to-end management system for Ethiopian bakery operations with multi
 - GET/POST `/api/inventory/adjustments`
 - POST `/api/inventory/adjustments/{id}/approve`
 
+**Phase 2: Production:**
+- GET/POST `/api/production/products`
+- GET/POST `/api/production/recipes`
+- GET `/api/production/recipes/{id}/components`
+- POST `/api/production/recipes/{id}/calculate-cost`
+- GET/POST `/api/production/orders`
+- POST `/api/production/orders/{id}/start`
+- POST `/api/production/orders/{id}/record-consumption`
+- POST `/api/production/orders/{id}/record-output`
+- POST `/api/production/orders/{id}/complete`
+- GET/POST `/api/production/adjustments`
+
+**Phase 3: Sales & Distribution:**
+- GET/POST `/api/customers`
+- GET/POST `/api/customers/{id}/pricing`
+- GET/POST `/api/dispatches`
+- POST `/api/dispatches/{id}/dispatch`
+- POST `/api/dispatches/{id}/receive`
+- GET/POST `/api/sales`
+- POST `/api/sales/{id}/complete`
+- GET/POST `/api/payments`
+
+**Phase 4: Financials:**
+- GET `/api/accounts`
+- GET `/api/accounts/{id}/balance`
+- GET/POST `/api/journal-entries`
+- POST `/api/journal-entries/{id}/post`
+- POST `/api/journal-entries/{id}/reverse`
+- GET `/api/reports/balance-sheet`
+- GET `/api/reports/profit-loss`
+
 **Reference Data:**
 - GET `/api/units`
 - GET `/api/branches`
 
 ### Model Relationships
 
-**InventoryItem** (core entity):
+**Key Relationships:**
+
+**InventoryItem** (Phase 1 core):
 - belongs to: MaterialType, Brand, Unit
-- has many: PurchasePrices, InventoryTransactions, PurchaseOrderItems
+- has many: PurchasePrices, InventoryTransactions, RecipeComponents
 
-**PurchaseOrder**:
-- has many: PurchaseOrderItems
-- belongs to: User (creator, approver, receiver)
+**Recipe** (Phase 2 core):
+- belongs to: Product, Unit
+- has many: RecipeComponents, ProductionOrders
+- **Critical**: Components reference inventory_item_id (brand-specific)
 
-**User**:
-- belongs to: Branch
-- has many: created entities (scoped by role)
+**ProductionOrder** (Phase 2):
+- belongs to: Recipe, User (supervisor)
+- has many: MaterialConsumption, Output, Substitutions
+- Auto-creates planned material consumption from recipe
 
-### Next Steps: Phase 2 - Production
+**Sale** (Phase 3 core):
+- belongs to: Customer, Branch, User
+- has many: SaleItems, Payments
+- Auto-generates inventory transactions on completion
 
-**Upcoming Tables:**
-- `products` - Finished goods
-- `recipes` + `recipe_components` - Production formulas
-- `production_orders` - Work orders
-- `production_material_consumption` - Material usage tracking
-- `production_output` - Finished goods yield
-- `recipe_substitutions` - Brand swap tracking
+**JournalEntry** (Phase 4 core):
+- has many: JournalEntryLines
+- belongs to: User (creator, poster)
+- Polymorphic reference to source transactions
+- Enforces debit = credit balance
+
+### Next Steps: Phase 5 - Integration & API Controllers
+
+**Remaining Work:**
+1. **API Controllers**: Implement RESTful controllers for all resources
+2. **Journal Entry Automation**: Auto-create journal entries for:
+   - Purchase order receipt → Inventory asset + Accounts payable
+   - Production completion → COGS + Finished goods
+   - Dispatch → Finished goods transfer between branches
+   - Sale → Revenue + COGS + Cash/Receivable
+   - Payment receipt → Cash/Bank + Accounts receivable
+3. **Seeders**: Material types, brands, products, customers
+4. **Validation Rules**: Form request validation for all endpoints
+5. **Authorization**: Policy-based access control per user role
+6. **Frontend Integration**: Vue 3 application (separate repository)
+7. **Reporting**: Dashboard, P&L, Balance Sheet, Inventory Reports
 
 ### Development Setup
 
