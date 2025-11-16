@@ -1,54 +1,31 @@
-# Bakery ERP System
+<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
-Complete end-to-end management system for Ethiopian bakery operations with multiple retail branches and central production facility.
+<p align="center">
+<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
+</p>
 
 ## Project Status: Phases 1-6 Complete (Foundation → Production Ready)
 
-### Implemented Features
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-#### Foundation Layer
-- **Users**: Multi-role authentication (Owner, Manager, Supervisor, Employee)
-- **Branches**: Main production + retail branches
-- **Units**: Measurement system (weight, volume, count)
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
-#### Phase 1: Inventory Management ✓
-- **Material Types**: Categorized raw materials (flour, sugar, oil, etc.) with Amharic translation support
-- **Brands**: Brand management for multi-brand inventory
-- **Inventory Items**: Brand-specific SKU system with auto-generation
-- **Purchase Prices**: Temporal pricing with effective date ranges
-- **Purchase Orders**: Full procurement workflow (draft → submitted → received)
-- **Inventory Transactions**: Complete audit trail of all stock movements
-- **Inventory Adjustments**: Error correction system with approval workflow
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-#### Phase 2: Production Management ✓
-- **Products**: Finished goods with type classification (Bread, Cake, Others)
-- **Product Prices**: Temporal pricing for finished goods
-- **Recipes**: Production formulas with auto-generated codes (RCP-PRODUCTNAME-001)
-- **Recipe Components**: Brand-specific ingredient lists
-- **Standard Batch Varieties**: Batch scaling configuration
-- **Production Orders**: Work orders with auto-generated numbers (WO-YYYYMMDD-001)
-- **Production Material Consumption**: Material usage tracking with variance detection
-- **Production Output**: Quality control tracking (good/rejected quantities)
-- **Recipe Substitutions**: Brand substitution audit trail
-- **Daily Production Adjustments**: Waste tracking (stale/damaged/worker error)
-- **Finished Goods Inventory**: Product movement ledger
+## Learning Laravel
 
-#### Phase 3: Sales & Distribution ✓
-- **Customers**: Walk-in, commission recipients, and branch customers
-- **Customer Pricing**: Contract pricing for commission recipients (temporal pattern)
-- **Dispatches**: Branch-to-branch transfers with damage tracking
-- **Dispatch Items**: Line-level cost snapshots and variance detection
-- **Sales**: Cash and credit sales with auto-generated numbers (SALE-BRANCHID-YYYYMMDD-001)
-- **Sale Items**: Line-level profit calculation
-- **Payments**: Payment tracking with advance payment support
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-#### Phase 4: Financial Management ✓
-- **Chart of Accounts**: Hierarchical account structure (27 system accounts)
-- **Journal Entries**: Double-entry bookkeeping with auto-generated numbers (JE-YYYYMMDD-001)
-- **Journal Entry Lines**: Debit/credit lines with balance validation
-- **Account Balances**: Current and historical balance calculations
-- **Entry Posting**: Draft → Posted → Reversed workflow
-- **Financial Reports**: Balance sheet and P&L foundations
+You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
 
 #### Phase 5: API Controllers & Routes ✓
 - **16 RESTful API Controllers**: Complete CRUD operations for all resources
@@ -68,72 +45,39 @@ Complete end-to-end management system for Ethiopian bakery operations with multi
 
 ### Database Schema (42 Tables)
 
-**Foundation Tables (3):**
-- `units` - Measurement units
-- `branches` - Organizational structure
-- `users` - Authentication and roles
+## Laravel Sponsors
 
-**Phase 1: Inventory Tables (8):**
-- `material_types` - Generic material categories
-- `brands` - Manufacturer brands
-- `inventory_items` - Specific brand+material combinations
-- `purchase_prices` - Historical price tracking
-- `purchase_orders` + `purchase_order_items` - Procurement
-- `inventory_transactions` - Stock movement ledger
-- `inventory_adjustments` - Stock corrections
+We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
-**Phase 2: Production Tables (11):**
-- `products` - Finished goods catalog
-- `product_prices` - Product pricing history
-- `recipes` - Production formulas
-- `recipe_components` - Brand-specific ingredient lists
-- `standard_batch_varieties` - Batch size configurations
-- `production_orders` - Work orders
-- `production_material_consumption` - Material usage with variance
-- `production_output` - Finished goods yield
-- `recipe_substitutions` - Brand swap tracking
-- `daily_production_adjustments` - Production waste
-- `finished_goods_inventory` - Product movement ledger
+### Premium Partners
 
-**Phase 3: Sales & Distribution Tables (7):**
-- `customers` - Customer master (walk-in, commission recipients, branches)
-- `customer_pricing` - Contract pricing
-- `dispatches` - Branch transfers
-- `dispatch_items` - Dispatch line items
-- `sales` - Sales transactions
-- `sale_items` - Sale line items with profit calculation
-- `payments` - Payment tracking
+- **[Vehikl](https://vehikl.com/)**
+- **[Tighten Co.](https://tighten.co)**
+- **[WebReinvent](https://webreinvent.com/)**
+- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+- **[64 Robots](https://64robots.com)**
+- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
+- **[Cyber-Duck](https://cyber-duck.co.uk)**
+- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
+- **[Jump24](https://jump24.co.uk)**
+- **[Redberry](https://redberry.international/laravel/)**
+- **[Active Logic](https://activelogic.com)**
+- **[byte5](https://byte5.de)**
+- **[OP.GG](https://op.gg)**
 
-**Phase 4: Financial Tables (3):**
-- `accounts` - Chart of accounts
-- `journal_entries` - Financial transaction headers
-- `journal_entry_lines` - Double-entry lines
+## Contributing
 
-### Key Design Decisions
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-1. **Brand-Specific Recipes**: Recipes reference exact brand+material combinations (not generic materials) to support:
-   - Multi-brand flour blending (e.g., 60% Brand A + 40% Brand B)
-   - Accurate cost tracking per brand
-   - Quality traceability
+## Code of Conduct
 
-2. **Temporal Pricing**: All prices have effective_date/expiry_date to handle Ethiopian price volatility
-   - Applies to: purchase_prices, product_prices, customer_pricing
-   - NULL expiry_date = current pricing
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-3. **Cost Snapshot Pattern**: Unit costs are locked at transaction time
-   - `dispatch_items.unit_cost` - COGS at dispatch time
-   - `sale_items.unit_cost` - COGS at sale time
-   - `production_material_consumption.unit_cost` - Price at production time
-   - **Critical**: Prevents retroactive P&L changes when new batches are produced
+## Security Vulnerabilities
 
-4. **Auto-Generated Codes**: Consistent format across all entities
-   - SKUs: `FLOUR-AP-MAMA-001`
-   - Recipes: `RCP-PRODUCTNAME-001`
-   - Work Orders: `WO-YYYYMMDD-001`
-   - Sales: `SALE-BRANCHID-YYYYMMDD-001`
-   - Journal Entries: `JE-YYYYMMDD-001`
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-5. **Approval Workflows**: Status enums (draft/submitted/approved) prevent premature data propagation
+## License
 
 6. **Double-Entry Bookkeeping**: All financial transactions create balanced journal entries
    - Debits must equal credits

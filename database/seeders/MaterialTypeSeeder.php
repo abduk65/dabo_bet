@@ -24,17 +24,13 @@ class MaterialTypeSeeder extends Seeder
                 'type_name' => 'All Purpose Flour',
                 'type_name_am' => 'የሁሉም ዓላማ ዱቄት',
                 'category' => 'flour',
-                'default_unit_id' => $kgUnit->id,
-                'description' => 'White all-purpose flour for bread and cake',
-            ],
+                'base_unit_id' => $kgUnit->id,            ],
             [
                 'type_code' => 'FLOUR-WW',
                 'type_name' => 'Whole Wheat Flour',
                 'type_name_am' => 'የስንዴ ዱቄት',
                 'category' => 'flour',
-                'default_unit_id' => $kgUnit->id,
-                'description' => 'Whole wheat flour for health bread',
-            ],
+                'base_unit_id' => $kgUnit->id,            ],
 
             // Ersho (yeast)
             [
@@ -42,17 +38,13 @@ class MaterialTypeSeeder extends Seeder
                 'type_name' => 'Dry Yeast',
                 'type_name_am' => 'ደረቅ እርሾ',
                 'category' => 'ersho',
-                'default_unit_id' => $kgUnit->id,
-                'description' => 'Active dry yeast for bread making',
-            ],
+                'base_unit_id' => $kgUnit->id,            ],
             [
                 'type_code' => 'YEAST-INST',
                 'type_name' => 'Instant Yeast',
                 'type_name_am' => 'ፈጣን እርሾ',
                 'category' => 'ersho',
-                'default_unit_id' => $kgUnit->id,
-                'description' => 'Instant yeast for quick rise',
-            ],
+                'base_unit_id' => $kgUnit->id,            ],
 
             // Bread improvers
             [
@@ -60,9 +52,7 @@ class MaterialTypeSeeder extends Seeder
                 'type_name' => 'Bread Improver',
                 'type_name_am' => 'የዳቦ መሻሻያ',
                 'category' => 'bread_improver',
-                'default_unit_id' => $kgUnit->id,
-                'description' => 'Bread improver for better texture and shelf life',
-            ],
+                'base_unit_id' => $kgUnit->id,            ],
 
             // Salt
             [
@@ -70,9 +60,7 @@ class MaterialTypeSeeder extends Seeder
                 'type_name' => 'Iodized Salt',
                 'type_name_am' => 'አዮዲን ጨው',
                 'category' => 'salt',
-                'default_unit_id' => $kgUnit->id,
-                'description' => 'Iodized table salt for baking',
-            ],
+                'base_unit_id' => $kgUnit->id,            ],
 
             // Sugar
             [
@@ -80,17 +68,13 @@ class MaterialTypeSeeder extends Seeder
                 'type_name' => 'White Sugar',
                 'type_name_am' => 'ነጭ ስኳር',
                 'category' => 'sugar',
-                'default_unit_id' => $kgUnit->id,
-                'description' => 'Refined white sugar',
-            ],
+                'base_unit_id' => $kgUnit->id,            ],
             [
                 'type_code' => 'SUGAR-BROWN',
                 'type_name' => 'Brown Sugar',
                 'type_name_am' => 'ቡናማ ስኳር',
                 'category' => 'sugar',
-                'default_unit_id' => $kgUnit->id,
-                'description' => 'Brown sugar for cakes',
-            ],
+                'base_unit_id' => $kgUnit->id,            ],
 
             // Oil
             [
@@ -98,17 +82,13 @@ class MaterialTypeSeeder extends Seeder
                 'type_name' => 'Vegetable Oil',
                 'type_name_am' => 'የአትክልት ዘይት',
                 'category' => 'oil',
-                'default_unit_id' => $lUnit->id,
-                'description' => 'Vegetable cooking oil',
-            ],
+                'base_unit_id' => $lUnit->id,            ],
             [
                 'type_code' => 'OIL-PALM',
                 'type_name' => 'Palm Oil',
                 'type_name_am' => 'የፓልም ዘይት',
                 'category' => 'oil',
-                'default_unit_id' => $lUnit->id,
-                'description' => 'Palm oil for frying',
-            ],
+                'base_unit_id' => $lUnit->id,            ],
 
             // Cake components
             [
@@ -116,49 +96,37 @@ class MaterialTypeSeeder extends Seeder
                 'type_name' => 'Butter',
                 'type_name_am' => 'ቅቤ',
                 'category' => 'cake_component',
-                'default_unit_id' => $kgUnit->id,
-                'description' => 'Butter for cakes and pastries',
-            ],
+                'base_unit_id' => $kgUnit->id,            ],
             [
                 'type_code' => 'MARGARINE',
                 'type_name' => 'Margarine',
                 'type_name_am' => 'ማርጋሪን',
                 'category' => 'cake_component',
-                'default_unit_id' => $kgUnit->id,
-                'description' => 'Margarine for baking',
-            ],
+                'base_unit_id' => $kgUnit->id,            ],
             [
                 'type_code' => 'EGGS',
                 'type_name' => 'Eggs',
                 'type_name_am' => 'እንቁላል',
                 'category' => 'cake_component',
-                'default_unit_id' => $piecesUnit->id,
-                'description' => 'Fresh eggs for baking',
-            ],
+                'base_unit_id' => $piecesUnit->id,            ],
             [
                 'type_code' => 'MILK-PWD',
                 'type_name' => 'Milk Powder',
                 'type_name_am' => 'የወተት ዱቄት',
                 'category' => 'cake_component',
-                'default_unit_id' => $kgUnit->id,
-                'description' => 'Powdered milk for cakes',
-            ],
+                'base_unit_id' => $kgUnit->id,            ],
             [
                 'type_code' => 'VANILLA',
                 'type_name' => 'Vanilla Extract',
                 'type_name_am' => 'ቫኒላ',
                 'category' => 'cake_component',
-                'default_unit_id' => $lUnit->id,
-                'description' => 'Vanilla flavoring',
-            ],
+                'base_unit_id' => $lUnit->id,            ],
             [
                 'type_code' => 'BAKING-PWD',
                 'type_name' => 'Baking Powder',
                 'type_name_am' => 'የጋበዝ ዱቄት',
                 'category' => 'cake_component',
-                'default_unit_id' => $kgUnit->id,
-                'description' => 'Baking powder for cakes',
-            ],
+                'base_unit_id' => $kgUnit->id,            ],
 
             // Packaging
             [
@@ -166,25 +134,19 @@ class MaterialTypeSeeder extends Seeder
                 'type_name' => 'Small Plastic Bag',
                 'type_name_am' => 'ትንሽ ፕላስቲክ ቦርሳ',
                 'category' => 'packaging',
-                'default_unit_id' => $piecesUnit->id,
-                'description' => 'Small plastic bags for individual bread',
-            ],
+                'base_unit_id' => $piecesUnit->id,            ],
             [
                 'type_code' => 'PKG-BAG-LG',
                 'type_name' => 'Large Plastic Bag',
                 'type_name_am' => 'ትልቅ ፕላስቲክ ቦርሳ',
                 'category' => 'packaging',
-                'default_unit_id' => $piecesUnit->id,
-                'description' => 'Large plastic bags for bulk',
-            ],
+                'base_unit_id' => $piecesUnit->id,            ],
             [
                 'type_code' => 'PKG-BOX',
                 'type_name' => 'Cake Box',
                 'type_name_am' => 'የኬክ ሳጥን',
                 'category' => 'packaging',
-                'default_unit_id' => $piecesUnit->id,
-                'description' => 'Cardboard boxes for cakes',
-            ],
+                'base_unit_id' => $piecesUnit->id,            ],
         ];
 
         foreach ($materialTypes as $materialType) {
