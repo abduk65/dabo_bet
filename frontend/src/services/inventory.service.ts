@@ -158,5 +158,42 @@ export const inventoryService = {
 
   async deletePurchaseOrderItem(purchaseOrderId: number, itemId: number): Promise<void> {
     await api.delete(`/purchase-orders/${purchaseOrderId}/items/${itemId}`)
+  },
+
+  // Inventory Item extended methods
+  async getInventoryItemPriceHistory(itemId: number): Promise<any[]> {
+    const response = await api.get<ApiResponse<any[]>>(`/inventory/items/${itemId}/price-history`)
+    return response.data.data
+  },
+
+  async getInventoryItemStockLevel(itemId: number): Promise<any> {
+    const response = await api.get<ApiResponse<any>>(`/inventory/items/${itemId}/stock-level`)
+    return response.data.data
+  },
+
+  // Inventory Adjustments
+  async getInventoryAdjustments(): Promise<any[]> {
+    const response = await api.get<ApiResponse<any[]>>('/inventory/adjustments')
+    return response.data.data
+  },
+
+  async getInventoryAdjustment(id: number): Promise<any> {
+    const response = await api.get<ApiResponse<any>>(`/inventory/adjustments/${id}`)
+    return response.data.data
+  },
+
+  async createInventoryAdjustment(data: any): Promise<any> {
+    const response = await api.post<ApiResponse<any>>('/inventory/adjustments', data)
+    return response.data.data
+  },
+
+  async approveInventoryAdjustment(id: number): Promise<any> {
+    const response = await api.post<ApiResponse<any>>(`/inventory/adjustments/${id}/approve`)
+    return response.data.data
+  },
+
+  async getPendingAdjustments(): Promise<any[]> {
+    const response = await api.get<ApiResponse<any[]>>('/inventory/adjustments-pending')
+    return response.data.data
   }
 }
