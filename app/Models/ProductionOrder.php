@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Recipe;
+use App\Models\User;
+use App\Models\ProductionMaterialConsumption;
+use App\Models\ProductionOutput;
+use App\Models\RecipeSubstitution;
 
 class ProductionOrder extends Model
 {
