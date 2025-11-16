@@ -8,6 +8,10 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Branch;
+use App\Models\PurchasePrice;
+use App\Models\PurchaseOrder;
+use App\Models\InventoryTransaction;
 
 class User extends Authenticatable
 {
