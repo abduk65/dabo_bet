@@ -15,99 +15,43 @@ class BrandSeeder extends Seeder
         $brands = [
             // Ethiopian brands
             [
-                'brand_name' => 'Mama\'s Choice',
-                'manufacturer' => 'Ethiopian Grain Trading Enterprise',
-                'country_of_origin' => 'Ethiopia',
-                'description' => 'Local Ethiopian flour brand, most popular',
-            ],
+                'brand_name' => 'Mama\'s Choice',                'country_of_origin' => 'Ethiopia',            ],
             [
-                'brand_name' => 'Golden Harvest',
-                'manufacturer' => 'Addis Milling PLC',
-                'country_of_origin' => 'Ethiopia',
-                'description' => 'Premium Ethiopian wheat flour',
-            ],
+                'brand_name' => 'Golden Harvest',                'country_of_origin' => 'Ethiopia',            ],
             [
-                'brand_name' => 'Sheger',
-                'manufacturer' => 'Sheger Flour Factory',
-                'country_of_origin' => 'Ethiopia',
-                'description' => 'Mid-range Ethiopian flour brand',
-            ],
+                'brand_name' => 'Sheger',                'country_of_origin' => 'Ethiopia',            ],
 
             // International brands
             [
-                'brand_name' => 'Lesaffre',
-                'manufacturer' => 'Lesaffre Group',
-                'country_of_origin' => 'France',
-                'description' => 'International yeast and bread improver brand',
-            ],
+                'brand_name' => 'Lesaffre',                'country_of_origin' => 'France',            ],
             [
-                'brand_name' => 'AB Mauri',
-                'manufacturer' => 'AB Mauri',
-                'country_of_origin' => 'UK',
-                'description' => 'Yeast and bakery ingredients',
-            ],
+                'brand_name' => 'AB Mauri',                'country_of_origin' => 'UK',            ],
             [
-                'brand_name' => 'Puratos',
-                'manufacturer' => 'Puratos Group',
-                'country_of_origin' => 'Belgium',
-                'description' => 'Premium bakery ingredients',
-            ],
+                'brand_name' => 'Puratos',                'country_of_origin' => 'Belgium',            ],
 
             // Oil brands
             [
-                'brand_name' => 'Fresh',
-                'manufacturer' => 'Fresh Plc',
-                'country_of_origin' => 'Ethiopia',
-                'description' => 'Ethiopian vegetable oil brand',
-            ],
+                'brand_name' => 'Fresh',                'country_of_origin' => 'Ethiopia',            ],
             [
-                'brand_name' => 'Eder',
-                'manufacturer' => 'Eder Foods',
-                'country_of_origin' => 'Ethiopia',
-                'description' => 'Ethiopian palm oil brand',
-            ],
+                'brand_name' => 'Eder',                'country_of_origin' => 'Ethiopia',            ],
 
             // Sugar brands
             [
-                'brand_name' => 'Wonji',
-                'manufacturer' => 'Wonji Sugar Factory',
-                'country_of_origin' => 'Ethiopia',
-                'description' => 'Ethiopian sugar producer',
-            ],
+                'brand_name' => 'Wonji',                'country_of_origin' => 'Ethiopia',            ],
             [
-                'brand_name' => 'Metehara',
-                'manufacturer' => 'Metehara Sugar Factory',
-                'country_of_origin' => 'Ethiopia',
-                'description' => 'Ethiopian sugar brand',
-            ],
+                'brand_name' => 'Metehara',                'country_of_origin' => 'Ethiopia',            ],
 
             // Dairy brands
             [
-                'brand_name' => 'Mama Dairy',
-                'manufacturer' => 'Mama Dairy Farm',
-                'country_of_origin' => 'Ethiopia',
-                'description' => 'Local dairy products',
-            ],
+                'brand_name' => 'Mama Dairy',                'country_of_origin' => 'Ethiopia',            ],
             [
-                'brand_name' => 'Holland Dairy',
-                'manufacturer' => 'Holland Dairy Ethiopia',
-                'country_of_origin' => 'Ethiopia',
-                'description' => 'Imported dairy products',
-            ],
+                'brand_name' => 'Holland Dairy',                'country_of_origin' => 'Ethiopia',            ],
 
             // Generic/No brand
             [
-                'brand_name' => 'Generic',
-                'manufacturer' => 'Various',
-                'country_of_origin' => 'Ethiopia',
-                'description' => 'Generic unbranded items',
-            ],
+                'brand_name' => 'Generic',                'country_of_origin' => 'Ethiopia',            ],
             [
-                'brand_name' => 'Local Market',
-                'manufacturer' => 'Local Suppliers',
-                'country_of_origin' => 'Ethiopia',
-                'description' => 'Items from local market vendors',
-            ],
+                'brand_name' => 'Local Market',                'country_of_origin' => 'Ethiopia',            ],
         ];
 
         foreach ($brands as $brand) {
