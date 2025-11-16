@@ -6,6 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Product;
+use App\Models\Unit;
+use App\Models\User;
+use App\Models\RecipeComponent;
+use App\Models\ProductionOrder;
 
 class Recipe extends Model
 {

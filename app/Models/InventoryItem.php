@@ -6,6 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\MaterialType;
+use App\Models\Brand;
+use App\Models\Unit;
+use App\Models\PurchasePrice;
+use App\Models\InventoryTransaction;
+use App\Models\InventoryAdjustment;
+use App\Models\PurchaseOrderItem;
 
 class InventoryItem extends Model
 {

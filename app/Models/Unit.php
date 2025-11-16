@@ -5,6 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\MaterialType;
+use App\Models\InventoryItem;
+use App\Models\PurchasePrice;
+use App\Models\InventoryTransaction;
 
 class Unit extends Model
 {
