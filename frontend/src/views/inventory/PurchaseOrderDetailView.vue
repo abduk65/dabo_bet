@@ -172,7 +172,7 @@
 
     <!-- Receive Items Modal -->
     <Modal v-model:show="showReceiveModal" title="Receive Items" size="xl">
-      <form @submit.prevent="handleReceive">
+      <form id="receive-form" @submit.prevent="handleReceive">
         <div class="space-y-4">
           <p class="text-sm text-gray-600">Record received items for this purchase order.</p>
 
@@ -220,14 +220,14 @@
         <div v-if="receiveError" class="mt-4 rounded-md bg-red-50 p-4">
           <p class="text-sm text-red-800">{{ receiveError }}</p>
         </div>
-
-        <template #footer>
-          <div class="flex gap-3 justify-end">
-            <button type="button" @click="closeReceiveModal" :disabled="receiving" class="btn">Cancel</button>
-            <button type="submit" :disabled="receiving" class="btn-primary">{{ receiving ? 'Processing...' : 'Receive Items' }}</button>
-          </div>
-        </template>
       </form>
+
+      <template #footer>
+        <div class="flex gap-3 justify-end">
+          <button type="button" @click="closeReceiveModal" :disabled="receiving" class="btn">Cancel</button>
+          <button type="submit" form="receive-form" :disabled="receiving" class="btn-primary">{{ receiving ? 'Processing...' : 'Receive Items' }}</button>
+        </div>
+      </template>
     </Modal>
 
     <!-- Confirm Cancel -->
