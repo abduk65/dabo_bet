@@ -1,206 +1,180 @@
 <template>
-  <div class="owner-dashboard min-h-screen bg-gray-50">
-    <!-- Page header -->
-    <div class="bg-white shadow">
-      <div class="px-4 sm:px-6 lg:px-8 py-6">
-        <div class="flex items-center justify-between">
-          <div>
-            <h1 class="text-2xl font-bold text-gray-900">Owner Dashboard</h1>
-            <p class="mt-1 text-sm text-gray-500">
-              Financial snapshot as of {{ formatDateTime(new Date()) }}
-            </p>
+  <div class="space-y-6 pb-12">
+    <!-- Page Header -->
+    <div class="bg-white shadow-sm border-b px-6 py-4">
+      <h1 class="text-2xl font-bold text-gray-900">Business Overview</h1>
+      <p class="text-sm text-gray-600 mt-1">{{ today }}</p>
+    </div>
+
+    <!-- Critical Metrics - Are we making money? -->
+    <div class="px-6">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Today's Profit/Loss -->
+        <div class="bg-white rounded-lg shadow p-6 border-l-4" :class="todayProfit >= 0 ? 'border-green-500' : 'border-red-500'">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-medium text-gray-600">Today's Profit/Loss</p>
+              <p class="text-3xl font-bold mt-2" :class="todayProfit >= 0 ? 'text-green-600' : 'text-red-600'">
+                {{ todayProfit >= 0 ? '+' : '' }}{{ formatCurrency(todayProfit) }}
+              </p>
+              <p class="text-xs text-gray-500 mt-1">Revenue: {{ formatCurrency(todayRevenue) }} | Cost: {{ formatCurrency(todayCost) }}</p>
+            </div>
           </div>
+        </div>
 
-          <!-- Refresh indicator -->
-          <div class="flex items-center gap-3">
-            <button
-              @click="refreshDashboard"
-              type="button"
-              class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-            >
-              <ArrowPathIcon :class="['h-5 w-5 mr-2', refreshing && 'animate-spin']" />
-              Refresh
-            </button>
+        <!-- Cash Position -->
+        <div class="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
+          <div>
+            <p class="text-sm font-medium text-gray-600">Cash on Hand</p>
+            <p class="text-3xl font-bold text-blue-600 mt-2">{{ formatCurrency(cashPosition) }}</p>
+            <p class="text-xs text-gray-500 mt-1">Last updated: {{ lastUpdated }}</p>
+          </div>
+        </div>
 
-            <!-- Auto-refresh toggle -->
-            <div class="flex items-center gap-2">
-              <span class="text-sm text-gray-600">Auto-refresh:</span>
-              <button
-                @click="toggleAutoRefresh"
-                type="button"
-                :class="[
-                  'relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2',
-                  autoRefresh ? 'bg-primary-600' : 'bg-gray-200'
-                ]"
-              >
-                <span
-                  :class="[
-                    'pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out',
-                    autoRefresh ? 'translate-x-5' : 'translate-x-0'
-                  ]"
-                />
-              </button>
+        <!-- Monthly Profit -->
+        <div class="bg-white rounded-lg shadow p-6 border-l-4" :class="monthlyProfit >= 0 ? 'border-green-500' : 'border-red-500'">
+          <div>
+            <p class="text-sm font-medium text-gray-600">This Month</p>
+            <p class="text-3xl font-bold mt-2" :class="monthlyProfit >= 0 ? 'text-green-600' : 'text-red-600'">
+              {{ formatCurrency(monthlyProfit) }}
+            </p>
+            <p class="text-xs text-gray-500 mt-1">{{ currentMonth }} profit/loss</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Daily Reconciliation - Where did the products go? -->
+    <div class="px-6">
+      <div class="bg-white rounded-lg shadow">
+        <div class="px-6 py-4 border-b">
+          <h2 class="text-lg font-bold text-gray-900">Today's Reconciliation</h2>
+          <p class="text-sm text-gray-600">Track production → dispatch → sales → leftovers</p>
+        </div>
+        <div class="p-6">
+          <div class="space-y-6">
+            <div v-for="product in reconciliation" :key="product.id" class="border rounded-lg p-4">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-gray-900">{{ product.name }}</h3>
+                <span v-if="product.variance !== 0" class="px-3 py-1 rounded-full text-xs font-semibold"
+                      :class="product.variance < 0 ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'">
+                  {{ Math.abs(product.variance) }} missing
+                </span>
+              </div>
+
+              <div class="grid grid-cols-5 gap-4 text-center">
+                <div>
+                  <p class="text-2xl font-bold text-gray-900">{{ product.produced }}</p>
+                  <p class="text-xs text-gray-600 mt-1">Produced</p>
+                </div>
+                <div>
+                  <p class="text-2xl font-bold text-gray-500">{{ product.dispatched }}</p>
+                  <p class="text-xs text-gray-600 mt-1">Dispatched</p>
+                </div>
+                <div>
+                  <p class="text-2xl font-bold text-gray-900">{{ product.soldMain }}</p>
+                  <p class="text-xs text-gray-600 mt-1">Sold (Main)</p>
+                </div>
+                <div>
+                  <p class="text-2xl font-bold text-gray-500">{{ product.soldBranches }}</p>
+                  <p class="text-xs text-gray-600 mt-1">Sold (Branches)</p>
+                </div>
+                <div>
+                  <p class="text-2xl font-bold" :class="product.leftover > 20 ? 'text-yellow-600' : 'text-gray-900'">
+                    {{ product.leftover }}
+                  </p>
+                  <p class="text-xs text-gray-600 mt-1">Leftover</p>
+                </div>
+              </div>
+
+              <!-- Formula explanation -->
+              <div class="mt-4 p-3 bg-gray-50 rounded text-xs text-gray-600">
+                <p class="font-mono">
+                  {{ product.produced }} (produced) - {{ product.dispatched}} (dispatched) = {{ product.soldMain + product.leftover }} (main stock)
+                </p>
+                <p class="font-mono mt-1">
+                  {{ product.soldMain }} (sold at main) + {{ product.leftover }} (leftover) + {{ product.soldBranches }} (sold at branches)
+                  = {{ product.soldMain + product.leftover + product.soldBranches }} / {{ product.produced }} produced
+                </p>
+                <p v-if="product.variance !== 0" class="text-red-600 font-semibold mt-2">
+                  ⚠️ Variance: {{ Math.abs(product.variance) }} pieces unaccounted for (possible theft/waste)
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Main content -->
-    <div class="px-4 sm:px-6 lg:px-8 py-6 space-y-6">
-      <!-- Key Metrics Row -->
-      <div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-        <MetricCard
-          label="Today's Revenue"
-          :value="metrics.todayRevenue"
-          :trend-percentage="metrics.revenueTrend"
-          :change="metrics.revenueChange"
-          variant="primary"
-          :icon="BanknotesIcon"
-          clickable
-          @click="navigateTo('/reports/revenue')"
-        />
-
-        <MetricCard
-          label="Today's Orders"
-          :value="metrics.todayOrders"
-          unit="orders"
-          :trend-percentage="metrics.ordersTrend"
-          variant="success"
-          :icon="ShoppingCartIcon"
-          :format-currency="() => String(metrics.todayOrders)"
-          clickable
-          @click="navigateTo('/sales/orders')"
-        />
-
-        <MetricCard
-          label="Profit Margin"
-          :value="metrics.profitMargin"
-          unit="%"
-          :trend-percentage="metrics.profitMarginTrend"
-          :variant="metrics.profitMargin >= 25 ? 'success' : metrics.profitMargin >= 15 ? 'warning' : 'danger'"
-          :icon="ChartBarIcon"
-          :format-currency="() => `${metrics.profitMargin.toFixed(1)}%`"
-        />
-
-        <MetricCard
-          label="Cash Position"
-          :value="metrics.cashPosition"
-          :trend-percentage="metrics.cashTrend"
-          variant="info"
-          :icon="CurrencyDollarIcon"
-        />
-      </div>
-
-      <!-- Alerts Summary -->
-      <AlertSummary
-        v-if="alerts.length > 0"
-        :alerts="alerts"
-        @dismiss="handleDismissAlert"
-        @view-all="navigateTo('/alerts')"
-      />
-
-      <!-- Revenue Trend Chart -->
-      <div class="bg-white shadow rounded-lg p-6">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-lg font-semibold text-gray-900">7-Day Revenue Trend</h2>
-          <div class="flex items-center gap-2">
-            <button
-              v-for="period in ['7d', '30d', '90d']"
-              :key="period"
-              @click="revenuePeriod = period"
-              :class="[
-                'px-3 py-1 text-sm font-medium rounded-md',
-                revenuePeriod === period
-                  ? 'bg-primary-100 text-primary-700'
-                  : 'text-gray-600 hover:bg-gray-100'
-              ]"
-            >
-              {{ period }}
-            </button>
-          </div>
+    <!-- Branch Performance - Which branch is making money? -->
+    <div class="px-6">
+      <div class="bg-white rounded-lg shadow">
+        <div class="px-6 py-4 border-b">
+          <h2 class="text-lg font-bold text-gray-900">Branch Performance</h2>
         </div>
-        <RevenueChart
-          :data="revenueChartData"
-          :loading="loadingRevenue"
-          :height="300"
-        />
-      </div>
-
-      <!-- Branch Comparison -->
-      <div class="bg-white shadow rounded-lg p-6">
-        <h2 class="text-lg font-semibold text-gray-900 mb-4">Branch Performance</h2>
-        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <BranchComparisonCard
-            v-for="branch in branches"
-            :key="branch.id"
-            :branch="branch"
-            :comparison-period="branchComparisonPeriod"
-            @click="navigateTo(`/branches/${branch.id}`)"
-          />
-        </div>
-      </div>
-
-      <!-- Product Performance -->
-      <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <!-- Top performers -->
-        <div class="bg-white shadow rounded-lg p-6">
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-semibold text-gray-900">Top Products</h2>
-            <span class="text-sm text-gray-500">By profitability</span>
-          </div>
-          <ProductPerformanceList
-            :products="topProducts"
-            :loading="loadingProducts"
-            type="top"
-          />
-        </div>
-
-        <!-- Bottom performers -->
-        <div class="bg-white shadow rounded-lg p-6">
-          <div class="flex items-center justify-between mb-4">
-            <h2 class="text-lg font-semibold text-gray-900">Products Needing Attention</h2>
-            <span class="text-sm text-gray-500">Low margin / slow moving</span>
-          </div>
-          <ProductPerformanceList
-            :products="bottomProducts"
-            :loading="loadingProducts"
-            type="bottom"
-          />
-        </div>
-      </div>
-
-      <!-- Pending Approvals -->
-      <div v-if="pendingApprovals.length > 0" class="bg-white shadow rounded-lg p-6">
-        <div class="flex items-center justify-between mb-4">
-          <div class="flex items-center gap-2">
-            <h2 class="text-lg font-semibold text-gray-900">Pending Approvals</h2>
-            <StatusBadge :label="String(pendingApprovals.length)" variant="yellow" />
-          </div>
-          <button
-            @click="navigateTo('/approvals')"
-            class="text-sm font-medium text-primary-600 hover:text-primary-700"
-          >
-            View all
-          </button>
-        </div>
-
-        <div class="space-y-3">
-          <div
-            v-for="approval in pendingApprovals.slice(0, 5)"
-            :key="approval.id"
-            class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 cursor-pointer"
-            @click="handleApprovalClick(approval)"
-          >
-            <div class="flex-1">
-              <p class="text-sm font-medium text-gray-900">{{ approval.title }}</p>
-              <p class="text-xs text-gray-500 mt-1">{{ approval.description }}</p>
+        <div class="p-6">
+          <div class="space-y-4">
+            <div v-for="branch in branches" :key="branch.id" class="flex items-center justify-between p-4 border rounded-lg">
+              <div>
+                <h3 class="font-bold text-gray-900">{{ branch.name }}</h3>
+                <p class="text-sm text-gray-600">{{ branch.sales }} sales today</p>
+              </div>
+              <div class="text-right">
+                <p class="text-xl font-bold" :class="branch.profit >= 0 ? 'text-green-600' : 'text-red-600'">
+                  {{ formatCurrency(branch.profit) }}
+                </p>
+                <p class="text-xs text-gray-500">{{ branch.margin }}% margin</p>
+              </div>
             </div>
-            <div class="flex items-center gap-3">
-              <span class="text-sm font-medium text-gray-900">
-                {{ formatCurrency(approval.amount) }}
-              </span>
-              <ChevronRightIcon class="h-5 w-5 text-gray-400" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cash Variance Alerts -->
+    <div class="px-6" v-if="cashVariances.length > 0">
+      <div class="bg-red-50 border border-red-200 rounded-lg">
+        <div class="px-6 py-4 border-b border-red-200">
+          <h2 class="text-lg font-bold text-red-900">⚠️ Cash Variance Alerts</h2>
+          <p class="text-sm text-red-700">Discrepancies exceeding 3% threshold</p>
+        </div>
+        <div class="p-6">
+          <div class="space-y-3">
+            <div v-for="variance in cashVariances" :key="variance.id" class="flex items-center justify-between p-3 bg-white rounded border border-red-200">
+              <div>
+                <p class="font-semibold text-gray-900">{{ variance.branch }}</p>
+                <p class="text-sm text-gray-600">{{ variance.date }} - {{ variance.cashier }}</p>
+              </div>
+              <div class="text-right">
+                <p class="text-lg font-bold text-red-600">{{ formatCurrency(variance.amount) }}</p>
+                <p class="text-xs text-red-700">{{ variance.percentage }}% variance</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Inventory Alerts - Low stock -->
+    <div class="px-6">
+      <div class="bg-white rounded-lg shadow">
+        <div class="px-6 py-4 border-b">
+          <h2 class="text-lg font-bold text-gray-900">Inventory Alerts</h2>
+        </div>
+        <div class="p-6">
+          <div v-if="lowStockItems.length === 0" class="text-center py-8 text-gray-500">
+            <p>All inventory levels are healthy</p>
+          </div>
+          <div v-else class="space-y-2">
+            <div v-for="item in lowStockItems" :key="item.id" class="flex items-center justify-between p-3 bg-yellow-50 border border-yellow-200 rounded">
+              <div>
+                <p class="font-semibold text-gray-900">{{ item.name }}</p>
+                <p class="text-sm text-gray-600">Reorder level: {{ item.reorderLevel }} {{ item.unit }}</p>
+              </div>
+              <div class="text-right">
+                <p class="text-lg font-bold text-yellow-700">{{ item.currentStock }} {{ item.unit }}</p>
+                <p class="text-xs text-yellow-600">Low stock</p>
+              </div>
             </div>
           </div>
         </div>
@@ -210,171 +184,122 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import {
-  ArrowPathIcon,
-  BanknotesIcon,
-  ShoppingCartIcon,
-  ChartBarIcon,
-  CurrencyDollarIcon,
-  ChevronRightIcon
-} from '@heroicons/vue/24/outline'
-import MetricCard from '@/components/common/MetricCard.vue'
-import StatusBadge from '@/components/common/StatusBadge.vue'
-import AlertSummary from '@/components/dashboard/AlertSummary.vue'
-import RevenueChart from '@/components/dashboard/RevenueChart.vue'
-import BranchComparisonCard from '@/components/dashboard/BranchComparisonCard.vue'
-import ProductPerformanceList from '@/components/dashboard/ProductPerformanceList.vue'
-import { formatCurrency, formatDateTime } from '@/utils/formatters'
-import { useNotification } from '@/composables/useNotification'
-import { dashboardService } from '@/services/dashboard.service'
+import { ref, computed, onMounted } from 'vue'
+import { useAuthStore } from '@/stores/auth'
 
-const router = useRouter()
-const { notify } = useNotification()
+const authStore = useAuthStore()
 
-// State
-const refreshing = ref(false)
-const autoRefresh = ref(true)
-const autoRefreshInterval = ref<number>()
-const revenuePeriod = ref('7d')
-const branchComparisonPeriod = ref('today')
+// Mock data - replace with API calls
+const todayRevenue = ref(45000)
+const todayCost = ref(32000)
+const todayProfit = computed(() => todayRevenue.value - todayCost.value)
+const monthlyProfit = ref(387000)
+const cashPosition = ref(125000)
+const lastUpdated = ref('2 hours ago')
 
-const metrics = ref({
-  todayRevenue: 0,
-  revenueTrend: 0,
-  revenueChange: 0,
-  todayOrders: 0,
-  ordersTrend: 0,
-  profitMargin: 0,
-  profitMarginTrend: 0,
-  cashPosition: 0,
-  cashTrend: 0
+const today = computed(() => {
+  return new Date().toLocaleDateString('en-ET', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
 })
 
-const alerts = ref<any[]>([])
-const revenueChartData = ref<any[]>([])
-const branches = ref<any[]>([])
-const topProducts = ref<any[]>([])
-const bottomProducts = ref<any[]>([])
-const pendingApprovals = ref<any[]>([])
-
-const loadingRevenue = ref(false)
-const loadingProducts = ref(false)
-
-// Methods
-async function loadDashboardData() {
-  refreshing.value = true
-
-  try {
-    // Load all dashboard data in parallel
-    const [
-      metricsData,
-      alertsData,
-      revenueData,
-      branchesData,
-      productsData,
-      approvalsData
-    ] = await Promise.all([
-      dashboardService.getOwnerMetrics(),
-      dashboardService.getAlerts(),
-      dashboardService.getRevenueData(revenuePeriod.value),
-      dashboardService.getBranchComparison(branchComparisonPeriod.value),
-      dashboardService.getProductPerformance(),
-      dashboardService.getPendingApprovals()
-    ])
-
-    metrics.value = metricsData
-    alerts.value = alertsData
-    revenueChartData.value = revenueData
-    branches.value = branchesData
-    topProducts.value = productsData.top
-    bottomProducts.value = productsData.bottom
-    pendingApprovals.value = approvalsData
-  } catch (error: any) {
-    notify('error', 'Failed to load dashboard', error.message)
-  } finally {
-    refreshing.value = false
-  }
-}
-
-async function refreshDashboard() {
-  await loadDashboardData()
-  notify('success', 'Dashboard refreshed')
-}
-
-function toggleAutoRefresh() {
-  autoRefresh.value = !autoRefresh.value
-
-  if (autoRefresh.value) {
-    startAutoRefresh()
-  } else {
-    stopAutoRefresh()
-  }
-}
-
-function startAutoRefresh() {
-  // Refresh every 30 seconds
-  autoRefreshInterval.value = window.setInterval(() => {
-    loadDashboardData()
-  }, 30000)
-}
-
-function stopAutoRefresh() {
-  if (autoRefreshInterval.value) {
-    clearInterval(autoRefreshInterval.value)
-  }
-}
-
-function handleDismissAlert(alertId: number) {
-  alerts.value = alerts.value.filter(a => a.id !== alertId)
-}
-
-function handleApprovalClick(approval: any) {
-  router.push(`/approvals/${approval.id}`)
-}
-
-function navigateTo(path: string) {
-  router.push(path)
-}
-
-// Lifecycle
-onMounted(() => {
-  loadDashboardData()
-
-  if (autoRefresh.value) {
-    startAutoRefresh()
-  }
+const currentMonth = computed(() => {
+  return new Date().toLocaleDateString('en-ET', { month: 'long', year: 'numeric' })
 })
 
-onUnmounted(() => {
-  stopAutoRefresh()
+// Reconciliation data
+const reconciliation = ref([
+  {
+    id: 1,
+    name: 'White Bread',
+    produced: 500,
+    dispatched: 350,
+    soldMain: 130,
+    soldBranches: 315,
+    leftover: 20,
+    variance: 500 - 350 - 130 - 20 - 315 // Should be 0 if no theft
+  },
+  {
+    id: 2,
+    name: 'Brown Bread',
+    produced: 400,
+    dispatched: 300,
+    soldMain: 85,
+    soldBranches: 280,
+    leftover: 15,
+    variance: 400 - 300 - 85 - 15 - 280 // Should be 0
+  }
+])
+
+// Branch performance
+const branches = ref([
+  {
+    id: 1,
+    name: 'Main Branch',
+    sales: 130,
+    profit: 1300,
+    margin: 40
+  },
+  {
+    id: 2,
+    name: 'Piassa Branch',
+    sales: 195,
+    profit: 1950,
+    margin: 38
+  },
+  {
+    id: 3,
+    name: 'Bole Branch',
+    sales: 185,
+    profit: 1850,
+    margin: 42
+  }
+])
+
+// Cash variances
+const cashVariances = ref([
+  {
+    id: 1,
+    branch: 'Piassa Branch',
+    date: 'Today',
+    cashier: 'Ahmed M.',
+    amount: -450,
+    percentage: 3.5
+  }
+])
+
+// Low stock items
+const lowStockItems = ref([
+  {
+    id: 1,
+    name: 'All-Purpose Flour (Mama)',
+    currentStock: 85,
+    reorderLevel: 100,
+    unit: 'kg'
+  },
+  {
+    id: 2,
+    name: 'Yeast (Momona)',
+    currentStock: 8,
+    reorderLevel: 10,
+    unit: 'kg'
+  }
+])
+
+function formatCurrency(amount: number): string {
+  return new Intl.NumberFormat('en-ET', {
+    style: 'currency',
+    currency: 'ETB',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0
+  }).format(amount)
+}
+
+onMounted(async () => {
+  // Load dashboard data from API
+  // await loadDashboardData()
 })
 </script>
-
-<style scoped>
-.owner-dashboard {
-  animation: fadeIn 0.3s ease-in-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Smooth scrolling */
-.owner-dashboard {
-  scroll-behavior: smooth;
-}
-
-/* Ensure cards are touch-friendly */
-@media (max-width: 640px) {
-  .owner-dashboard .grid {
-    gap: 1rem;
-  }
-}
-</style>
