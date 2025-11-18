@@ -128,14 +128,14 @@
         <div v-if="formError" class="mt-4 rounded-md bg-red-50 p-4">
           <p class="text-sm text-red-800">{{ formError }}</p>
         </div>
-
-        <template #footer>
-          <div class="flex gap-3 justify-end">
-            <button type="button" @click="closeModal" :disabled="submitting" class="btn">Cancel</button>
-            <button type="submit" :disabled="submitting" class="btn-primary">{{ submitting ? 'Saving...' : 'Save' }}</button>
-          </div>
-        </template>
       </form>
+
+      <template #footer>
+        <div class="flex gap-3 justify-end">
+          <button type="button" @click="closeModal" :disabled="submitting" class="btn">Cancel</button>
+          <button type="submit" @click="handleSubmit" :disabled="submitting" class="btn-primary">{{ submitting ? 'Saving...' : 'Save' }}</button>
+        </div>
+      </template>
     </Modal>
 
     <!-- Consumption Modal -->

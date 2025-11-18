@@ -36,6 +36,9 @@ class DatabaseSeeder extends Seeder
 
             // Phase 4: Financial
             AccountSeeder::class,
+
+            // Operational Flow (3-day realistic data)
+            OperationalFlowSeeder::class,
         ]);
     }
 }
